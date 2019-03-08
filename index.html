@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>John Wilson</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" href="favicon.ico">
+  <link href="https://fonts.googleapis.com/css?family=Comfortaa|Pacifico|Satisfy" rel="stylesheet">
+
+  <script>
+  var t = 0 ;
+  var refresh = 24 ;
+
+  function circleMovement(cx,cy,radius,freq,phase,time) {
+    var sint = radius * Math.sin(6.3 * freq * time + phase) ;
+    var cost = radius * Math.cos(6.3 * freq * time + phase) ;
+    var y = cy ;
+    var x = cx ;
+    if (phase < 0) {
+      return {x:x + sint,y: y + cost} ;
+    } else {
+      return {x:x + cost, y:y + sint} ;
+
+    }
+  }
+
+  function horMovement(cx,cy,radius,freq,phase,time) {
+    var y = cy  ;
+    var x = cx + radius * Math.sin(6.3 * freq * time + phase) ;
+    return {x:x,y:y} ;
+  }
+
+
+  function moveElement(id,movementDetails,time) {
+    var el = document.getElementById(id);
+    if (el != null) {
+      var pos = movementDetails.update(time) ;
+      el.style.top = pos.y + 'px' ;
+      el.style.left = pos.x + 'px' ;
+      return pos ;
+    } else {
+      return null ;
+    }
+
+  }
+
+  function onLoad() {
+
+    window.setInterval(function(){
+
+      var bottomCloudMovementDetails = {
+          update: function(time){
+            var pos = horMovement(this.cx,this.cy,this.radius,this.freq,this.phase,time) ;
+            return pos ;
+          },
+          phase: 0.0,
+          radius: 560,
+          cx: 400,
+          cy: 500,
+          freq: 0.03125
+
+      } ;
+
+      var topCloudMovementDetailsClock = {
+          update: function(time){
+            var pos = horMovement(this.cx,this.cy,this.radius,this.freq,this.phase,time) ;
+            return pos ;
+          },
+          phase: 0.0,
+          radius: 160,
+          cx: 400,
+          cy: 230,
+          freq: 0.006125
+
+      } ;
+
+
+      moveElement('bottomcloud',bottomCloudMovementDetails,t) ;
+      moveElement('topcloud',topCloudMovementDetailsClock,t) ;
+
+
+      t += (refresh/1000)
+      console.log('t = ' + t) ;
+
+    }, refresh);
+  }
+
+
+  </script>
+
+</head>
+
+<body onload='onLoad()'>
+
+  <div class="top_container">
+    <img class='top-cloud' id='topcloud' src="images/cloud.png" alt="cloud image">
+    <h1>I'm John</h1>
+    <h2 class='normalfw'>a wannabe <span class='pro'><strong>pro</strong></span>grammer.</h2>
+    <img class='bottom-cloud' id='bottomcloud' src="images/cloud.png" alt="cloud image">
+    <img src="images/mountain.png"  alt="moutain image">
+  </div>
+
+  <div class="middle_container">
+    <div class="profile">
+      <img src="images/john.svg" alt="me!">
+      <h2>Hello.</h2>
+      <p>Lorem ipsum dolor sit amet, vitae volutpat, dui conubia, dolor urna. Non auctor, montes nulla distinctio.</p>
+    </div>
+    <hr>
+    <div class="skills">
+      <h2>My Skills.</h2>
+      <div class="skill-row">
+        <img class="skill-image-left" src="images/skill-chillies.png"  alt="Eating Skill">
+        <h3>Lorem & Ipsum</h3>
+        <p>Lorem ipsum dolor sit amet, quis in duis, iaculis id felis. Consectetuer vestibulum, nunc urna lectus, erat ligula. Hendrerit nam, lectus ante, ut lorem eros.</p>
+      </div>
+      <div class="skill-row">
+        <img class="skill-image-right" src="images/skill-computer.png"  alt="Computing Skill">
+        <h3>Lorem Ipsum Dolor</h3>
+        <p>Lorem ipsum dolor sit amet, mauris sed consectetuer. Etiam et eu, bibendum interdum, lacus quis mauris. Curabitur wisi, quisque vel eu, rutrum nam.</p>
+      </div>
+    </div>
+    <hr>
+    <div class="contact-me">
+      <h2>Get In Touch</h2>
+      <h3>Lorem ipsum dolor sit amet, non elit.</h3>
+      <p>Lorem ipsum dolor sit amet, in quis, aenean amet. Phasellus sodales, tellus donec dui, ornare erat.</p>
+      <a class="btn" href="mailto:name@email.com">CONTACT ME!</a>
+    </div>
+  </div>
+
+
+  <div class="bottom_container" >
+
+    <a class="footer-link" href="https://www.linkedin.com/">LinkedIn</a>
+    <a class="footer-link" href="https://twitter.com/">Twitter</a>
+    <a class="footer-link" href="https://www.appbrewery.co/">Website</a>
+    <p class='copyright'>© 2019 John Wilson.</p>
+  </div>
+
+<div id='freepik' style='visibility: hidden;'>Icons made by <a href="https://www.freepik.com/" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" 			    title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" 			    title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
+</body>
+
+</html>

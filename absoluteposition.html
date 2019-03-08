@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+  <head>
+    <meta charset="utf-8">
+    <title>Colour Block Alignment with absolute position</title>
+    <script>
+
+      var t = 0 ;
+      var refresh = 24 ;
+
+      function circleMovement(cx,cy,radius,freq,phase,time) {
+
+        var y = cy + radius * Math.sin(6.3 * freq * time + phase) ;
+        var x = cx + radius * Math.cos(6.3 * freq * time + phase) ;
+        if (phase < 0) {
+          return {x:y,y:x} ;
+        } else {
+          return {x:x,y:y} ;
+
+        }
+      }
+
+      function moveElement(id,movementDetails,time) {
+        var el = document.getElementById(id);
+        if (el != null) {
+          var pos = movementDetails.update(time) ;
+          el.style.top = pos.y + 'px' ;
+          el.style.left = pos.x + 'px' ;
+          return pos ;
+        } else {
+          return null ;
+        }
+
+      }
+
+      function onLoad() {
+
+        window.setInterval(function(){
+
+          var movementDetails = {
+              update: function(time){
+                var pos = circleMovement(this.cx,this.cy,this.radius,this.freq,this.phase,time) ;
+                return pos ;
+              },
+              phase: -2.0,
+              radius: 100,
+              cx: 180,
+              cy: 180,
+              freq: 0.33
+
+          } ;
+
+          var movementDetailsClock = {
+              update: function(time){
+                var pos = circleMovement(this.cx,this.cy,this.radius,this.freq,this.phase,time) ;
+                return pos ;
+              },
+              phase: 2.0,
+              radius: 40,
+              cx: 90,
+              cy: 90,
+              freq: 1.0
+
+          } ;
+
+
+          moveElement('animate-block',movementDetails,t) ;
+          moveElement('middle-block',movementDetailsClock,t) ;
+
+
+          t += (refresh/1000)
+          console.log('t = ' + t) ;
+
+        }, refresh);
+      }
+
+    </script>
+  </head>
+
+  <body onload="onLoad()">
+
+    <div class='middle_container'  id='middle-block' style="background-color: purple; width:200px; height:300px; position: absolute;">
+        middle container
+    </div>
+
+    <div class='colourblocktest' id='animate-block' style="z-index: -1; background-color: green; width:300px; height:300px; position: absolute; left: 60px; top: 37px; ">
+
+      <div class='red' style="background-color: red; width:100px; height:100px; position: absolute; left: 200px; top: 200px">
+      </div>
+
+      <div class='blue' style="background-color: blue; width:100px; height:100px;position: absolute; left: 100px; top: 100px">
+      </div>
+
+      <div class='yellow' style="background-color: yellow; width:100px; height:100px;position: absolute; left: 0px; top: 0px">
+      </div>
+
+    </div>
+
+
+  </body>
+</html>

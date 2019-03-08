@@ -1,0 +1,41 @@
+body {
+  background-color: white;
+  margin: 0;
+}
+
+h1 {
+  color: blue;
+  margin: 0;
+}
+
+.top_container {
+  background-color: #eff9f5 ;
+  border: solid 10px;
+  margin: 0;
+  padding: 20px;
+  width: 200px;
+  height: 200px;
+
+}
+
+p {
+  margin: 0;
+}
+.middle_container {
+  background-color: blue ;
+  border: solid 20px;
+  margin-left: 260px;
+
+  width: 200px;
+  height: 200px;
+}
+
+.bottom_container {
+  background-color: yellow ;
+  border: solid 10px;
+  margin-left: 500px;
+
+
+  width: 200px;
+  height: 200px;
+}
