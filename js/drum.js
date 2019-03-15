@@ -1,3 +1,20 @@
+function buttonAnimationKey(key) {
+    var chElement = document.querySelector(".drum." + key) ;
+
+    if (chElement != null) {
+      chElement.classList.add("pressed") ;
+
+      setInterval(function(key){
+
+          console.log("Drum Animation off " + key) ;
+          var chElement = document.querySelector(".drum." + key) ;
+          if (chElement != null) {
+            chElement.classList.remove("pressed") ;
+          }
+      },400,key)
+    }
+
+}
 function playAudioAsset(key) {
   var audioAsset;
 
@@ -27,6 +44,9 @@ function playAudioAsset(key) {
       break;
   }
   if (typeof(audioAsset) != 'undefined') {
+
+    buttonAnimationKey(key);
+
     var audio = new Audio(audioAsset);
     audio.play();
   }
@@ -44,7 +64,7 @@ function initCallBacks() {
         var audioAsset;
 
         // we are only allowing to play one sound at a time!
-
+        //
         if (clst.contains('w')) {
           playAudioAsset('w') ;
 
