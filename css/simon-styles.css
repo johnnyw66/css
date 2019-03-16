@@ -3,11 +3,16 @@ body {
   background-color: #011F3F;
 }
 
+
 #level-title {
   font-family: 'Press Start 2P', cursive;
   font-size: 3rem;
   margin:  5%;
   color: #FEF2BF;
+}
+
+#hud-info {
+  color: white;
 }
 
 .container {
@@ -26,10 +31,6 @@ body {
   border-radius: 20%;
 }
 
-.game-over {
-  background-color: red;
-  opacity: 0.8;
-}
 
 .red {
   background-color: red;
@@ -50,4 +51,28 @@ body {
 .pressed {
   box-shadow: 0 0 20px white;
   background-color: grey;
+}
+
+/* Alternative 'body' background colours */
+
+.simons-turn {
+  background-color: #011F3F;
+}
+
+.simons-thinking {
+  background-color: #011F3F;
+}
+
+.players-turn {
+  background-color:grey;
+}
+
+.game-waiting-to-start {
+  background-color: green;
+}
+
+.game-over {
+  background-color: purple;
+  opacity: 0.8;
+
 }
