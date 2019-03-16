@@ -1,10 +1,11 @@
 function buttonAnimationKey(key) {
     var chElement = document.querySelector(".drum." + key) ;
+    var pressedElement = document.querySelector(".pressed") ;
 
-    if (chElement != null) {
+    if (chElement != null && pressedElement == null) {
       chElement.classList.add("pressed") ;
 
-      setInterval(function(key){
+      setTimeout(function(key){
 
           console.log("Drum Animation off " + key) ;
           var chElement = document.querySelector(".drum." + key) ;
@@ -99,6 +100,14 @@ function initCallBacks() {
   }
 
 }
+
+function audioPlay() {
+  audioAsset = "sounds/crash.mp3";
+  var audio = new Audio(audioAsset);
+  audio.play();
+}
+
 window.onload = function() {
   initCallBacks();
+
 };

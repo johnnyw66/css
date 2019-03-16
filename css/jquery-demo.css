@@ -1,0 +1,14 @@
+h1 {
+  color:red;
+}
+
+.pressed {
+  box-shadow: 0 3px 4px 0 #DBEDF3;
+  opacity: 0.5;
+}
+
+.big-title {
+  font-size: 5rem ;
+  color:yellow;
+  font-family:cursive;
+}
