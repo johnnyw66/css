@@ -1,4 +1,4 @@
-
+// jshint esversion:6
 // InGame Message Constants
 
 const GAMESTATUS_GAMESTART = "Press A Key to Start";
@@ -27,10 +27,10 @@ const SLIGHT_PAUSE= 1000 ;        // Slight Pause between States - Useful for Si
 const AI_PLAYER_DELAY= 500 ;        // ai-player delay
 
 
-const REFRESH = 500;      // Refresh period (ms)- Lower period == faster game!
+const REFRESH = 300;      // Refresh period (ms)- Lower period == faster game!
                           // NOTE: This should be no lower than 'ANIMATEBUTTON_DURATION'
 
-const MAXROUNDS = 64;
+const MAXROUNDS = 3;
 
 const aiPlayer  =   false ;
 
@@ -40,6 +40,15 @@ var simonPlaysOnlyNewNote = false ;  // We can play one of two variants of the g
 var currentLevel = 1;
 var lights = [];
 var qStates = [];
+var animation  = {
+  red: {block:"red", audio:"sounds/red.mp3"},
+  green: {block:"green", audio:"sounds/green.mp3"},
+  blue: {block:"blue", audio:"sounds/blue.mp3"},
+  yellow: {block:"yellow", audio:"sounds/yellow.mp3"},
+  wrong: {block:"none", audio:"sounds/wrong.mp3"},
+  win: {block:"none", audio:"sounds/wrong.mp3"}
+ } ;
+
 
 var state = GAME_STATE_START;
 var currentNote = 0;
@@ -72,7 +81,7 @@ function animateLight(colour) {
   $(".btn." + colour).addClass("pressed");
   setTimeout(function(colour) {
     $(".btn." + colour).removeClass("pressed");
-  }, ANIMATEBUTTON_DURATION, colour)
+  }, ANIMATEBUTTON_DURATION, colour) ;
 
 }
 
@@ -90,31 +99,24 @@ function enableWaitForKeyOrMouseEvent() {
     changeState(GAME_STATE_PAUSE_BEFORE_SIMON);
   });
 }
-// enable and bind 4 game buttons
+
+// Enable and bind 4 game buttons
+
 function enablePlayButtons() {
-  $(".btn.red").click(function(ev) {
-    playAndCheckAnimateLight(0);
-  });
-  $(".btn.green").click(function(ev) {
-    playAndCheckAnimateLight(1);
+  $(".btn").click(function(ev) {
+    var colour = ev.target.id ;
+    playAndCheckAnimateLight(colour);
 
   });
-  $(".btn.blue").click(function(ev) {
-    playAndCheckAnimateLight(2);
-  });
-  $(".btn.yellow").click(function(ev) {
-    playAndCheckAnimateLight(3);
 
-  });
 }
 
-// display 4 player buttons
+// Disable 4 player buttons
 function disablePlayButtons() {
   $(document).unbind("click keydown");
   $(".btn").unbind("click");
 
 }
-
 
 
 function stateString(state) {
@@ -153,14 +155,10 @@ function stateString(state) {
 
 function leaveState(state) {
   console.log("leaveState " + stateString(state));
-
-
   // leave currentstate
   switch (state) {
-
     case GAME_STATE_PAUSE:
       break;
-
     case GAME_STATE_WAITFORSTARTKEY:
       break;
     case GAME_STATE_PAUSE_BEFORE_SIMON:
@@ -168,10 +166,8 @@ function leaveState(state) {
     case GAME_STATE_PLAYGAME_SIMONSAYS:
       break;
     case GAME_STATE_PLAYGAME_PLAYERSAYS:
-      disablePlayButtons();
       break;
     default:
-      disablePlayButtons();
       break;
   }
 }
@@ -182,6 +178,7 @@ function enterState(state) {
   switch (state) {
 
     case GAME_STATE_PAUSE:
+      disablePlayButtons();             // disable all button presses - allow click and keypress
       timeFinishState = time + SLIGHT_PAUSE;
       break;
 
@@ -194,6 +191,8 @@ function enterState(state) {
       break;
 
     case GAME_STATE_PAUSE_BEFORE_SIMON:
+      disablePlayButtons();             // disable all button presses
+
 
       timeFinishState = time + PAUSE_BEFORE_SIMONSAYS;
       changeBackGroundColourOfHud("simons-thinking") ;
@@ -201,6 +200,7 @@ function enterState(state) {
       break;
 
     case GAME_STATE_PLAYGAME_SIMONSAYS:
+      disablePlayButtons() ;
 
       if (simonPlaysOnlyNewNote) {
         timeFinishState = time + DELAY_BEFORE_SIMON_PLAYS_SINGLE_NOTE;
@@ -220,12 +220,14 @@ function enterState(state) {
       break;
 
     case GAME_STATE_ENDINGGAME:
+      disablePlayButtons() ;
       timeFinishState = time + PAUSE_BEFORE_ENDGAME;
       changeBackGroundColourOfHud("game-over") ;
       setGameOverMessage() ;
       break;
 
     case GAME_STATE_ENDGAME:
+      disablePlayButtons() ;
       break;
 
     default:
@@ -235,7 +237,12 @@ function enterState(state) {
 
 //
 function changeStateAfterDelay(newState) {
-
+  // if (qStates.length >= 1) {
+  //   var newStateStr = stateString(newState) ;
+  //   var stateInWaitingStr = stateString(qStates[0]) ;
+  //   throw Error(`qStates[0] = ${stateInWaitingStr} adding ${newStateStr} (len) ` + qStates.length);
+  //
+  // }
   qStates.push(newState) ;
   changeState(GAME_STATE_PAUSE);
 
@@ -256,39 +263,25 @@ function resetGame() {
   qStates =  [] ;
   lights = [];
   gameRefreshPeriod = REFRESH ;
+  currentNote = 0 ;
   currentLevel = 1;
   time = 0;
-  animation = [{
-      block: "red",
-      audio: "sounds/red.mp3"
-    },
-    {
-      block: "green",
-      audio: "sounds/green.mp3"
-    },
-    {
-      block: "blue",
-      audio: "sounds/blue.mp3"
-    },
-    {
-      block: "yellow",
-      audio: "sounds/yellow.mp3"
-    },
-    {
-      block: "fail",
-      audio: "sounds/wrong.mp3"
-    },
 
-  ];
   for (let i = 0; i < MAXROUNDS; i++) {
     lights.push(pickARandomLight());
   }
-  changeState(GAME_STATE_WAITFORSTARTKEY);
+  changeStateAfterDelay(GAME_STATE_WAITFORSTARTKEY);
 }
 
 function playSound(assetName) {
-    var audio = new Audio(assetName);
-    audio.play();
+    try {
+      console.log("trying to play " + assetName) ;
+      // try and play audio
+      var audio = new Audio(assetName);
+      audio.play();
+    } catch(e) {
+      console.log("Exeception playing audio " + e.message) ;
+    }
 }
 
 
@@ -299,7 +292,7 @@ function playAndCheckAnimateLight(light) {
   if (lights[currentNote] != light) {
     // Fail!!
     console.log("FAIL!!!! END GAME");
-    playAndAnimateLight(4);
+    playAndAnimateLight("wrong");
     changeStateAfterDelay(GAME_STATE_ENDINGGAME);
   } else {
     console.log("CORRECT  NOTE SO FAR - BUMP TO NEXT NOTE");
@@ -319,7 +312,7 @@ function playAndCheckAnimateLight(light) {
       } else {
 
         console.log("YOU WIN!!!! END GAME");
-        playAndAnimateLight(4);
+        playAndAnimateLight("win");
         changeStateAfterDelay(GAME_STATE_ENDINGGAME);
 
       }
@@ -344,20 +337,22 @@ function changeGameSpeed() {
 }
 
 function playAndAnimateAllLights() {
-  playAndAnimateLight(0);
-  playAndAnimateLight(1);
-  playAndAnimateLight(2);
-  playAndAnimateLight(3);
+  playAndAnimateLight("red");
+  playAndAnimateLight("green");
+  playAndAnimateLight("blue");
+  playAndAnimateLight("yellow");
 }
 
 function playAndAnimateLight(light) {
+  console.log("Light " + light + ">>>> " + animation) ;
 
   playSound(animation[light].audio);
   animateLight(animation[light].block);
 }
 
 function pickARandomLight() {
-  return Math.floor(Math.random() * 4);
+  var colours = ["red","green","blue","yellow"];
+  return colours[Math.floor(Math.random() * 4)];
 }
 
 
@@ -413,6 +408,9 @@ function update(dt) {
       break;
 
     case GAME_STATE_WAITFORSTARTKEY:
+      if (aiPlayer) {
+        changeState(GAME_STATE_PAUSE_BEFORE_SIMON);
+      }
       break;
 
     case GAME_STATE_PAUSE_BEFORE_SIMON:
@@ -446,7 +444,7 @@ function update(dt) {
         // Use our very clever AI player for debugging
         if (aiPlayer && time > timeFinishState) {
             timeFinishState = time + AI_PLAYER_DELAY ;
-            playAndCheckAnimateLight(lights[currentNote])
+            playAndCheckAnimateLight(lights[currentNote]) ;
         }
 
       break;
@@ -459,8 +457,7 @@ function update(dt) {
       break;
 
     case GAME_STATE_ENDGAME:
-      resetGame();
-      changeStateAfterDelay(GAME_STATE_WAITFORSTARTKEY);
+      resetGame() ;
       break;
   }
 
