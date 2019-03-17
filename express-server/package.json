@@ -2,14 +2,15 @@
   "name": "express-server",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "calculator.js",
   "scripts": {
     "test": "testPackage",
-    "start": "node server.js"
+    "start": "node calculator.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.18.3",
     "express": "^4.16.4"
   }
 }

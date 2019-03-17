@@ -1,5 +1,5 @@
 # node init (making sure server.js is set as our start point)
-# node init express
+# npm install express body-parser
 # sudo npm install -g nodemon
 #npm init expess
-nodemon server.js
+nodemon calculator.js

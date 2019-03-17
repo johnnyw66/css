@@ -16,7 +16,12 @@ app.get("/contact",(request,response)=>{
 
 app.get("/hobbies",(request,response)=>{
   response.header("plain/text");
-  response.send("Contact me!") ;
+  response.send("I drive!") ;
+});
+
+app.get("/aboutme",(request,response)=>{
+  response.header("plain/text");
+  response.send("I Am John") ;
 });
 
 app.listen(3000, () => {
