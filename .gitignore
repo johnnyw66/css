@@ -1,4 +1,5 @@
 .gitignore
 express-server/node_modules/*
 teehee
+bitcoin/node_modules/*
 
