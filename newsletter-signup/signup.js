@@ -1,13 +1,24 @@
 //jshint esversion:6
+
+/*
+module.exports = {
+  chimpAPIKey: dxxxxxxxxxxxxxxxxxxxxxxxxxxxx64fa-us20
+};
+
+*/
+
+const secrets = require("./secrets.js")
 const express = require("express");
 const bodyParser = require("body-parser");
 const request = require("request");
 const fs = require('file-system');
 
 const app = express();
-const chimpAPIKey = "fb2b64ade7eb7c426869ddeee11a7181-us20" ;
+
 const chimpListId = "4767b93980" ;
 const chimpAPIbaseUrl = "https://us20.api.mailchimp.com/3.0/lists" ;
+const chimpAPIKey = secrets.chimpAPIKey;
+
 
 app.use(bodyParser.urlencoded({
   extended: true
@@ -38,7 +49,7 @@ function sendFile(respond, resource, altResource) {
 
 
 app.listen(3000, () => {
-  console.log("Listening on 3000...");
+  console.log("Listening on 3000..." + chimpAPIKey);
 });
 
 
@@ -48,18 +59,53 @@ app.post("/signup", (req, res) => {
 
   var firstName = bodyForm.firstName;
   var lastName = bodyForm.lastName;
-  var firstName = bodyForm.email;
-  var options = {
-    url: "/" + chimpListId,
-    baseUrl: chimpAPIbaseUrl,
+  var email = bodyForm.email;
 
+  var data = {
+    update_existing:true,
+    members: [
+          {
+            email_address: email,
+            status: "subscribed",
+            merge_fields: {
+              FNAME: firstName,
+              LNAME: lastName
+            },
+
+           }
+    ]
+  } ;
+
+  var jsonData = JSON.stringify(data) ;
+  console.log(jsonData) ;
+
+  var options = {
+    uri: "/" ,
+    baseUrl: chimpAPIbaseUrl + "/" + chimpListId,
+    method: "POST",
+    headers: {
+      // "Content-Type": "application/json",
+      "Authorization" : "johnny " + chimpAPIKey
+    },
+    body: jsonData
 
   } ;
-  response(options,(error,request,body) => {
 
+  request(options,(error,response,body) => {
+    if (error) {
+      console.log("Error") ;
+    } else {
 
+    }
+    // console.log(response.statusCode) ;
+    // console.log(response) ;
+    var ourResponse = JSON.parse(body) ;
+
+    res.writeHead(200,{"Content-Type": "application/json"}) ;
+    res.write(JSON.stringify(ourResponse)) ;
+    res.end() ;
   });
-  res.send("OK");
+
 });
 
 app.get("/list", (req, res) => {
@@ -71,7 +117,6 @@ app.get("/list", (req, res) => {
     baseUrl: chimpAPIbaseUrl + "/" + chimpListId,
     method: "GET",
     headers: {
-
       // "Content-Type": "application/json",
       "Authorization" : "johnny " + chimpAPIKey
     },

@@ -3,3 +3,5 @@ bluetooth/node_modules/*
 express-server/node_modules/*
 bitcoin/node_modules/*
 newsletter-signup/node_modules/*
+newsletter-signup/secrets.js
+
