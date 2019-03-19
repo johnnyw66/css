@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>BitCount</title>
+  </head>
+  <body>
+    <h1>Quote Ticker</h1>
+
+    <form class="form" action="/quote" method="post">
+
+      <input type="text" name="amount" value="" placeholder="how many coins">
+
+      <select class="dropdown" name="crypto">
+        <option value="BTC">Bitcoin</option>
+        <option value="ETH">Eth</option>
+        <option value="LTC">LiteCoins</option>
+      </select>
+
+      <select class="dropdown" name="fiat">
+        <option value="USD">US Dollars</option>
+        <option value="GBP">GB Pounds</option>
+        <option value="EUR">EU Euros</option>
+      </select>
+
+      <button type="submit">Quote</button>
+
+    </form>
+
+
+  </body>
+</html>
