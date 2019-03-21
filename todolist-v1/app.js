@@ -57,26 +57,6 @@ app.get("/",(req,res)=>{
 
 }) ;
 
-app.get("/eg",(req,res)=>{
-
-  let currentDate = new Date() ;
-  let currentDay = currentDate.getDay() ;
-
-  res.write("") ;
-  res.write("") ;
-  res.end("") ;
-
-}) ;
-
-app.get("/index.html",(req,res)=>{
-
-  let currentDate = new Date() ;
-  let currentDay = currentDate.getDay() ;
-
-  res.sendFile("/index.html") ;
-
-}) ;
-
 
 // Rendering
 
@@ -88,3 +68,24 @@ function renderList(list,renderType,cls) {
   var rendered = list.map((item) => { return renderView(renderType,item,cls) ; }).join("") ;
   return rendered ;
 }
+
+
+// app.get("/eg",(req,res)=>{
+//
+//   let currentDate = new Date() ;
+//   let currentDay = currentDate.getDay() ;
+//
+//   res.write("") ;
+//   res.write("") ;
+//   res.end("") ;
+//
+// }) ;
+//
+// app.get("/index.html",(req,res)=>{
+//
+//   let currentDate = new Date() ;
+//   let currentDay = currentDate.getDay() ;
+//
+//   res.sendFile("/index.html") ;
+//
+// }) ;
