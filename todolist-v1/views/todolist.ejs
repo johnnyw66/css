@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Todo list</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="js/validation.js"></script>
+  </head>
+  <body>
+
+    <div class="box" id="heading">
+      <h1 class="<%= dayStyle %>"><%= currentDay %></h1>
+    </div>
+
+    <div class="box">
+      <ul>
+        <%- renderedToDoList %>
+      </ul>
+
+      <form class="toDoForm item" name="tdForm" action="/" onsubmit="return validateToDoForm(tdForm);" method="post">
+          <input type="text" name="todo" placeholder="New Item" autocomplete="off">
+          <button type="submit">+</button>
+      </form>
+
+    </div>
+
+
+
+
+  </body>
+</html>
