@@ -1,0 +1,8 @@
+heroku create # from the place where you 'npm init' 
+# this will create a .git repos with heroku remote
+# git remote -v 
+
+#After making changes - you need to come back to this directory
+#and git add . ; git commit -m 'commit message' ; git push heroku master
+# wait for a while for you app to spin up
+

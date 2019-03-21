@@ -1,0 +1,4 @@
+brew tap heroku/brew && brew install heroku
+heroku login
+heroku autocomplete --refresh-cache
+
