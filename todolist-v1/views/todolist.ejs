@@ -17,7 +17,7 @@
         <%- renderedToDoList %>
       </ul>
 
-      <form class="toDoForm item" name="tdForm" action="/" onsubmit="return validateToDoForm(tdForm);" method="post">
+      <form class="toDoForm item" name="tdForm" action="<%= returnPost %>" onsubmit="return validateToDoForm(tdForm);" method="post">
           <input type="text" name="todo" placeholder="New Item" autocomplete="off">
           <button type="submit">+</button>
       </form>
