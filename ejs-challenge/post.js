@@ -4,7 +4,10 @@
 // Note: 'exports' is short for module.exports
 // Note: '(a,b) =>'  is equiv to 'function(a,b)'
 
+const ld = require("lodash") ;
+
 const posts = [] ;
+
 
 exports.addPost = (postTitle,postBody) => {
   console.log("addPost : " + postTitle) ;
@@ -17,14 +20,34 @@ exports.getPostFromId = (id) => {
   return posts[Number(id)] ;
 }
 
+
+exports.getAllPosts = ()=> {
+    return posts ;
+}
+
+
+
+function _trim(str) {
+  return ld.replace(str,new RegExp("[_ ,-]","g"),"").toLowerCase() ;
+}
+
+exports.findByTitle = (title) => {
+  const trimmedTitle = _trim(title) ;
+  // console.log(trimmedTitle) ;
+
+  for(let post of posts) {
+    if (_trim(post.postTitle) === trimmedTitle) {
+      return post ;
+    }
+  }
+  return undefined ;
+}
+
+
 // Render Support
 
 exports.renderPostedContent = ()=> {
   return posts.map( (post) => {
       return "<div class='post'><a href='/post?" + post.id + "'<p>" + post.postTitle + "</a> : " + post.postText + "</p></div>" ;
   }).join(" ") ;
-}
-
-exports.getAllPosts = ()=> {
-    return posts ;
 }

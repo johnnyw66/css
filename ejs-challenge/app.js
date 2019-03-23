@@ -28,7 +28,8 @@ app.use(express.static("public"));
 
 app.get("/", (req,res) => {
     const postedContent = post.renderPostedContent() ;
-    res.render("home",{content: homeStartingContent,postContent: postedContent, post:post}) ;
+    const view = {content: homeStartingContent,postContent: postedContent, post:post};
+    res.render("home",view) ;
 } ) ;
 
 app.get("/about", (req,res) => {
@@ -56,7 +57,29 @@ app.post("/compose", (req,res) => {
 app.get("/post/:query", (req,res) => {
 
   const {query} = req.params ;
-  const blog = post.getPostFromId(query) ;
+  const blog =  post.getPostFromId(query) ;
+  renderBlog(res,blog) ;
+
+} ) ;
+
+app.get("/title/:query", (req,res) => {
+
+  const {query} = req.params ;
+  const blog =  post.findByTitle(query);
+  renderBlog(res,blog) ;
+
+}) ;
+
+
+
+app.listen(3000, function() {
+  console.log("Server started on port 3000");
+});
+
+
+// Support functions
+
+function renderBlog(res,blog) {
 
   if (blog === undefined) {
     res.render("error",{content: errorContent}) ;
@@ -67,9 +90,4 @@ app.get("/post/:query", (req,res) => {
                         post: blog.postText
                      }) ;
   }
-
-} ) ;
-
-app.listen(3000, function() {
-  console.log("Server started on port 3000");
-});
+}

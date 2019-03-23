@@ -12,8 +12,10 @@
   <%
     post.getAllPosts().forEach((post)=>{
       %>
-            <h3 class=""><a href='/post/<%= post.id %>'><%= post.postTitle %></a></h3>
-            <p class=""><%= post.postText.substring(0,100) + "...." %></p>
+            <h3 class=""><%= post.postTitle %></h3>
+            <p class=""><%= post.postText.substring(0,100) + " ... " %>
+              <a href='/post/<%= post.id %>'>Read More</a>
+            </p>
        <%
     }) ;
   %>
