@@ -1,0 +1,22 @@
+<%- include('partials/header') %>
+
+<h1>Home</h1>
+<p><%= content %></p>
+
+<!--
+<%- postContent %>
+-->
+
+<div>
+  <p><b>Alternative Way ][ of Producing Rendering</b></p>
+  <%
+    post.getAllPosts().forEach((post)=>{
+      %>
+            <h3 class=""><a href='/post/<%= post.id %>'><%= post.postTitle %></a></h3>
+            <p class=""><%= post.postText.substring(0,100) + "...." %></p>
+       <%
+    }) ;
+  %>
+</div>
+
+<%- include('partials/footer') %>
