@@ -1,20 +1,30 @@
 //jshint esversion:6
 
+// import modules
 const path = require('path')
 const express = require("express") ;
 const bodyParser = require("body-parser") ;
 const ejs = require("ejs") ;
+const errorHandler = require('errorhandler');
 
-const daysOfTheWeek = [ "Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"] ;
 
-const app = express() ;
+// import local modules
+const datemod = require(path.join(__dirname, 'dateSupport.js'))
 
 const toDoList = [] ;
 const workList = [] ;
 
+const app = express() ;
+
+
+console.log(datemod) ;
+
+// ejs.set('partials', path.join(__dirname, 'partials'))
+
 
 app.use(express.static(path.join(__dirname, 'public')))
 .set('views', path.join(__dirname, 'views'))
+.set('partials', path.join(__dirname, 'partials'))
 .set('view engine', 'ejs')
 .set('view options', {delimiter: '%'})
 .use(bodyParser.urlencoded( {
@@ -39,23 +49,16 @@ app.get(["/","/work"],(req,res)=>{
   const {originalUrl} = req ;
   const list = (originalUrl === "/" ? toDoList : workList) ;
 
-  let currentDate = new Date() ;
-  let day = currentDate.getDay() ;
-  console.log(req.originalUrl) ;
+  // prepare render view
 
-  let currentDay = currentDate.toLocaleDateString("en-US",{
-    weekday:"long",
-    day: "numeric",
-    month: "long",
-    // year: "numeric"
-  }) ;
-
-  let dayStyle = (day === 0 || day === 6) ? "weekend" : "weekday";
-  let renderedToDoList = renderList(list,"div","item") ;
+  const day = datemod.getDay() ;
+  const dayStyle = (day === 0 || day === 6) ? "weekend" : "weekday";
+  const renderedToDoList = renderList(list,"div","item") ;
+  const formatDate = datemod.formattedDate() ;
 
   res.render('todolist', {
                           dayStyle: dayStyle,
-                          currentDay: currentDay,
+                          currentDay: formatDate,
                           renderedToDoList: renderedToDoList,
                           returnPost: originalUrl
                         });  // views/list.ejs
@@ -63,6 +66,16 @@ app.get(["/","/work"],(req,res)=>{
 }) ;
 
 
+ // any other pages - remove leading '/' and attempt to render that
+
+ app.get("*",(req,res) => {
+  try {
+    console.log("Attempting to render " + req.originalUrl) ;
+    res.render(req.originalUrl.substr(1)) ;
+  } catch(e) {
+    res.render("error") ;
+  }
+ }) ;
 
 // Rendering
 

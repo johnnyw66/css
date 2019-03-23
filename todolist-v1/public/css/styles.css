@@ -12,7 +12,9 @@ h1 {
   color: #fff;
   padding: 10px;
 }
-
+h2 {
+  text-align: center;
+}
 .weekday {
   color: blue ;
 }

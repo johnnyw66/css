@@ -1,12 +1,4 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>Todo list</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <script src="js/validation.js"></script>
-  </head>
-  <body>
+    <%- include("header") %>
 
     <div class="box" id="heading">
       <h1 class="<%= dayStyle %>"><%= currentDay %></h1>
@@ -19,13 +11,10 @@
 
       <form class="toDoForm item" name="tdForm" action="<%= returnPost %>" onsubmit="return validateToDoForm(tdForm);" method="post">
           <input type="text" name="todo" placeholder="New Item" autocomplete="off">
-          <button type="submit">+</button>
+          <button type="submit" value="<%= returnPost %>">+</button>
+          <!-- @TODO Decide if it is best to act on the button value or the post action -->
       </form>
 
     </div>
 
-
-
-
-  </body>
-</html>
+    <%- include("footer") %>
