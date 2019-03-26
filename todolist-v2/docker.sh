@@ -7,4 +7,5 @@ nodemon app.js
 #node app.js
 #docker container exec -it mongo bash
 #docker container exec -it mongo mongo 
+#docker container exec -it mongo mongo "mongodb+srv://clusterjohnny-m6nxe.mongodb.net/test" --username admin-johnny 
 

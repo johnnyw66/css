@@ -6,7 +6,8 @@ const express = require("express") ;
 const bodyParser = require("body-parser") ;
 const ejs = require("ejs") ;
 const errorHandler = require('errorhandler');
-
+const _ = require('lodash');
+console.log(_.capitalize("hello")) ;
 // import local modules
 const datemod = require(path.join(__dirname, 'dateSupport.js'))
 const dbdata = require(path.join(__dirname, 'dbSupport.js'))
@@ -93,7 +94,7 @@ app.get("/:listname",(req,res)=>{
                             currentDay: formatDate,
                             renderedToDoList: renderedToDoList,
                             returnPost: listname,
-                            listName:listname
+                            listName:_.capitalize(listname)
                           });  // views/list.ejs
   }).catch((reason)=>{
 
