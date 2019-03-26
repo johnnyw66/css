@@ -17,7 +17,7 @@ mongoose.connect('mongodb://localhost:27017/toDoDB', {
 });
 
 
-const toDoSchema = new mongoose.Schema({
+const itemSchema = new mongoose.Schema({
   title: {
     type: String,
     required: [true, 'REQUIRED, mate!']
@@ -32,60 +32,27 @@ const toDoSchema = new mongoose.Schema({
   }
 });
 
-const ToDo = mongoose.model('ToDo', toDoSchema);
+const Item = mongoose.model('Item', itemSchema);
 
-
+// Returns a Promise to Add a NEW Entry to a named list
 exports.add = (listname, entry) => {
 
   console.log("add name = ", listname);
   console.log("add entry = ", entry);
-
-  return new Promise((resolved) => {
-    const toDo = new ToDo({
-      title: entry,
-      name: listname
-    });
-    toDo.save();
-    resolved('Added Complete');
-  }, (rejected) => {
-    rejected('Add Failed');
-  });
+  return Item({title: entry,name: listname}).save();
 
 }
 
-exports.removeToDoById = (id) => {
+exports.delete = (id) => {
   console.log("removeToDoById", id);
-  ToDo.deleteOne({
-    _id: id
-  }, (res) => {
-    console.log("dbSupport delete one entry ", res);
-  });
-  return null;
+  return Item.deleteOne({_id: id}) ;
 }
 
+
+// Returns a Promise to return a list of items - from a given named toToList
 
 exports.getListFromName = (name) => {
-
-  return new Promise((resolved) => {
-    ToDo.find({
-      name: name
-    }, (err, items) => {
-      if (err) {
-        console.log("ERROR!!!!!", err);
-
-      } else {
-        const bldList = [];
-        items.forEach((item) => {
-          bldList.push(item.title);
-        });
-        console.log("FINALLY BUILT LIST ", bldList);
-        return resolved(bldList);
-      }
-    });
-  }, (rejected) => {
-    console.log("REJECTED!!!!!");
-  });
-
+  return Item.find({name: name }) ;
 }
 
 exports.test = () => {

@@ -7,8 +7,6 @@ const bodyParser = require("body-parser") ;
 const ejs = require("ejs") ;
 const errorHandler = require('errorhandler');
 
-
-
 // import local modules
 const datemod = require(path.join(__dirname, 'dateSupport.js'))
 const dbdata = require(path.join(__dirname, 'dbSupport.js'))
@@ -33,6 +31,35 @@ app.listen(process.env.PORT || 3000, () => {
   console.log("Listening...");
 });
 
+
+app.get("/",(req,res) => {
+    res.redirect("/home") ;
+}) ;
+
+
+// Ignore GET /delete  - just redirect
+app.get("/delete",(req,res)=>{
+  res.redirect("/home") ;
+}) ;
+
+
+// Infortunately Forms do not support the 'delete' method.
+
+app.post("/delete",(req,res)=>{
+  const {id} = req.body ;
+  const referer = req.headers.referer ;
+  console.log("id",id) ;
+
+  dbdata.delete(id).then((result)=>{
+
+    res.redirect(referer) ;
+
+  }).catch((error)=>{
+
+  });
+
+}) ;
+
 app.post("/:listname",(req,res)=>{
 
   const {listname} = req.params ;
@@ -40,6 +67,7 @@ app.post("/:listname",(req,res)=>{
   dbdata.add(listname,req.body.todo).then((message)=>{
 
     console.log("RESOLVED FROM dbdata.add ->",message) ;
+    // redirect to GET
     res.redirect("/" + listname) ;
 
   }).catch((error)=>{
@@ -48,9 +76,6 @@ app.post("/:listname",(req,res)=>{
 
 }) ;
 
-app.get("/",(req,res) => {
-    res.redirect("/home") ;
-}) ;
 
 app.get("/:listname",(req,res)=>{
 
@@ -91,7 +116,7 @@ app.get("/:listname",(req,res)=>{
 // Rendering
 
 function renderView(tag,item,cls="") {
-  return `<${tag} class='${cls}'><input type='checkbox'><p>${item}</p></${tag}>` ;
+  return `<form action='/delete' method='post'><${tag} class='${cls}'><input type='checkbox'  name='id' value='${item._id}' onChange = 'this.form.submit()'><p>${item.title}</p></${tag}></form>` ;
 }
 
 function renderList(list,renderType,cls) {
