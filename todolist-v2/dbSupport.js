@@ -7,14 +7,19 @@
 
 // New Mongo/Mongoose support for persistent data
 
-const mongoose = require("mongoose");
+const remoteDB = _buildSecureLink("mongodb+srv://admin-johnny:<PASSWORD>@clusterjohnny-m6nxe.mongodb.net/toDoDB?retryWrites=true") ;
+const localDB = "mongodb://localhost:27017/toDoDB" ;
 
+const mongoose = require("mongoose");
 
 mongoose.set('useCreateIndex', true);
 
-mongoose.connect('mongodb://localhost:27017/toDoDB', {
+mongoose.connect(remoteDB, {
   useNewUrlParser: true
-});
+}).catch((e)=> {
+  console.log("Error with Mongoose connection", e.message) ;
+}) ;
+
 
 
 const itemSchema = new mongoose.Schema({
@@ -59,4 +64,12 @@ exports.getListFromName = (name) => {
 
 exports.test = () => {
   console.log("Testing dbSupport");
+}
+
+
+function _buildSecureLink(str) {
+  var lines = require('fs').readFileSync(".password.in", 'utf-8')
+      .split('\n')
+      .filter(Boolean);
+  return str.replace("<PASSWORD>", lines[0]) ;
 }
