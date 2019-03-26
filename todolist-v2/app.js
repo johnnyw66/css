@@ -92,7 +92,8 @@ app.get("/:listname",(req,res)=>{
                             dayStyle: dayStyle,
                             currentDay: formatDate,
                             renderedToDoList: renderedToDoList,
-                            returnPost: listname
+                            returnPost: listname,
+                            listName:listname
                           });  // views/list.ejs
   }).catch((reason)=>{
 
