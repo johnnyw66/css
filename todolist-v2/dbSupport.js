@@ -39,14 +39,16 @@ exports.add = (listname, entry) => {
 
   console.log("add name = ", listname);
   console.log("add entry = ", entry);
+
   return Item({title: entry,name: listname}).save();
 
 }
 
 exports.delete = (id) => {
-  console.log("removeToDoById", id);
+  console.log("delete By Id", id);
   return Item.deleteOne({_id: id}) ;
 }
+
 
 
 // Returns a Promise to return a list of items - from a given named toToList
