@@ -9,6 +9,7 @@ todolist-v2/node_modules/*
 todolist-v2/.password.in
 mongoDB/node_modules/*
 ejs-challenge/node_modules/*
-
+blog/node_modules/*
+blog/.password.in
 .DS_Store
 

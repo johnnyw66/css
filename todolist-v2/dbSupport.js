@@ -71,5 +71,6 @@ function _buildSecureLink(str) {
   var lines = require('fs').readFileSync(".password.in", 'utf-8')
       .split('\n')
       .filter(Boolean);
+  console.log("<<<<<<<_buildSecureLink>>>>>>",lines[0]) ;
   return str.replace("<PASSWORD>", lines[0]) ;
 }
