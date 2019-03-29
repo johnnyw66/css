@@ -11,5 +11,6 @@ mongoDB/node_modules/*
 ejs-challenge/node_modules/*
 blog/node_modules/*
 blog/.password.in
+wiki-api/.password.ini
+wiki-api/node_modules/*
 .DS_Store
-
