@@ -72,9 +72,6 @@ app.route("/articles")
 
 
 
-
-
-
 // Individual articles with given Id
 app.route("/articles/:id")
 
