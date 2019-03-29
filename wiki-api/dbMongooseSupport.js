@@ -71,7 +71,7 @@ exports.updatePost =  (id, title, content) => {
 }
 
 exports.patchPost =  (id, patch) => {
- return Article.update({_id: id},{$set: patch}) ;
+ return Article.updateOne({_id: id},{$set: patch}) ;
 }
 
 // Returns a Query to return a list of items - from a given named toToList
