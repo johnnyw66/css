@@ -21,7 +21,7 @@ app.listen(process.env.PORT || 3000, () => {
 
 
 app.route("/articles")
-// GET
+
 .get( (req,res) => {
 
   db.getAllArticles()
@@ -37,7 +37,7 @@ app.route("/articles")
   }) ;
 
 })
-// POST
+
 .post( (req,res) => {
 
   const {title,content} = req.body ;
@@ -53,7 +53,7 @@ app.route("/articles")
   }) ;
 
 })
-// DELETE
+
 .delete( (req,res) => {
 
   db.removeAllPosts()
@@ -72,6 +72,9 @@ app.route("/articles")
 
 
 
+
+
+
 // Individual articles with given Id
 app.route("/articles/:id")
 
@@ -80,9 +83,8 @@ app.route("/articles/:id")
     const {id} = req.params ;
 
     db.getArticleFromId(id)
-
     .then((article) => {
-      console.log("Articles",article) ;
+      console.log("Article",article) ;
       res.send(article) ;
     })
 
@@ -99,6 +101,64 @@ app.route("/articles/:id")
     db.removePost(id)
 
     .then((article) => {
+      console.log("Article",article) ;
+      res.send(article) ;
+    })
+
+    .catch((err) => {
+      console.log("ERR",err) ;
+      res.send(err) ;
+    }) ;
+} )
+
+.put((req,res) => {
+
+    const {id} = req.params ;
+    const {title,content} = req.body ;
+    db.updatePost(id,title,content)
+
+    .then((article) => {
+      console.log("Article",article) ;
+      res.send(article) ;
+    })
+
+    .catch((err) => {
+      console.log("ERR",err) ;
+      res.send(err) ;
+
+    }) ;
+
+
+})
+
+.patch((req,res) => {
+
+    const {id} = req.params ;
+    // Only modified those fields supplied in the patch request
+    db.patchPost(id,req.body)
+
+    .then((article) => {
+      console.log("Article",article) ;
+      res.send(article) ;
+    })
+
+    .catch((err) => {
+      console.log("ERR",err) ;
+      res.send(err) ;
+
+    }) ;
+
+}) ;
+
+// Allow to search by Title
+app.route("/articles/title/:title")
+.get((req,res) => {
+
+    const {title} = req.params ;
+
+    db.getArticleFromTitle(title)
+
+    .then((article) => {
       console.log("Articles",article) ;
       res.send(article) ;
     })
@@ -107,32 +167,4 @@ app.route("/articles/:id")
       console.log("ERR",err) ;
       res.send(err) ;
     }) ;
-} ) ;
-
-
-
-
-
-
-//DELETE
-// app.delete("/articles/:id", (req,res) => {
-//   const {id} = req.params ;
-//   db.removePost(id).then((article)=>{
-//     console.log("Articles",article) ;
-//     res.send(article) ;
-//   }).catch((err) => {
-//     console.log("ERR",err) ;
-//     res.send("GET ERROR") ;
-//   }) ;
-//
-// } ) ;
-
-
-// UPDATE
-app.put("/", (req,res) => {
-    res.send("PUT OK") ;
-} ) ;
-
-app.patch("/", (req,res) => {
-    res.send("PUT OK") ;
 } ) ;

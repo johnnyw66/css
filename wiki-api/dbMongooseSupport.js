@@ -64,14 +64,24 @@ exports.removeAllPosts =  () => {
 
 }
 
-// Returns a Promise to return a list of items - from a given named toToList
+exports.updatePost =  (id, title, content) => {
+
+ return Article.update({_id: id},{title: title, content: content},{overwrite: true}) ;
+
+}
+
+exports.patchPost =  (id, patch) => {
+ return Article.update({_id: id},{$set: patch}) ;
+}
+
+// Returns a Query to return a list of items - from a given named toToList
 
 exports.getArticleFromTitle = (title) => {
   return Article.findOne({title: title }) ;
 }
 
 exports.getArticleFromId = (id) => {
-	console.log("getPostFromId",id) ;
+	console.log("getArticleFromId",id) ;
   return Article.findById(id) ;
 }
 
