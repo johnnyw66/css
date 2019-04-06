@@ -1,7 +1,7 @@
 //jshint esversion:6
 const md5 = require('md5') ;
 const bcrypt = require('bcrypt') ;
-const saltRounds = 10 ;
+const saltRounds = 12 ;
 const baseSalt = process.env.SECRET ;
 
 const mongoose = require('mongoose') ;
@@ -22,11 +22,10 @@ const userSchema = new mongoose.Schema({
 
 console.log("Encryption Secret",baseSalt) ;
 
-console.log("Check",bcrypt.hashSync("hello", saltRounds)) ;
-
-userSchema.plugin(encrypt, {secret: process.env.SECRET , encryptedFields: ['XXXXXpassword']})
+// userSchema.plugin(encrypt, {secret: process.env.SECRET , encryptedFields: ['XXXXXpassword']})
 
 const User =  new mongoose.model('User',userSchema) ;
+
 
 
 exports.register = (email,password) => {
