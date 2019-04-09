@@ -14,7 +14,7 @@
   const simplexNoise = new openSimplexNoise(100) ;
   let noiseAmp = 10 ; //random(10,120) ;
 
-  const demoTimeOut = 45 ;
+  const demoTimeOut = 120 ;
 
   const kFrameRate = 24;
 
@@ -58,6 +58,7 @@
   let flowerCol;
   let petalCol;
   let stemCol;
+  let noiseyPetalCol  ;
 
 
 
@@ -98,7 +99,7 @@
 
 
 
- 
+
   class NoiseShape {
 
   simplex = true ;
@@ -129,6 +130,8 @@
   }
 
   drawShape(){
+    fill(noiseyPetalCol);
+
     beginShape() ;
     for(let pixel = 0 ; pixel < this.numPixels ; pixel++){
 
@@ -620,8 +623,13 @@ class PetalThing extends NoiseShape{
     } else {
       stroke(0, 0, 0.40);
     }
-
+    if (noiseyMode) {
+      strokeWeight(0.0) ;
+    } else {
+      strokeWeight(0.6) ;
+    }
     ellipse(0, 0, stemRadius, stemRadius);
+    strokeWeight(0.4) ;
 
 
 
@@ -766,7 +774,10 @@ class PetalThing extends NoiseShape{
 
     flowerCol = color(255, 0, 0, 40);
     petalCol = color(200, 200, 25, 40);
+    noiseyPetalCol = color(255, 255, 0, 40);
+    stemCol = color(247, 152, 98, 5);
     stemCol = color(255, 255, 0, 40);
+
     tht = 0;
 
 
