@@ -6,8 +6,16 @@
   <title>Flower</title>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.3/p5.js"></script>
+  <script src="js/opensimplexnoise.js"></script>
+
+
   <script>
   // Constants
+  const simplexNoise = new openSimplexNoise(100) ;
+  let noiseAmp = 10 ; //random(10,120) ;
+
+  const demoTimeOut = 45 ;
+
   const kFrameRate = 24;
 
   const kRadius = 20.0;
@@ -79,9 +87,125 @@
   var interpColours = kInterpColours;
   var motionBlur = kMotionBlur;
   var noStrk = kNoStrokeFlag;
+  var noiseyMode = false ;
 
   var moveTime = 0;
   var animTime = 0;
+  var phaseTime = 0 ;
+  var time = 0 ;
+
+  var dMode = 0 ;
+
+
+
+ 
+  class NoiseShape {
+
+  simplex = true ;
+  id = random(10,1000) ;
+  rad = 1.3;
+  freq = 2;
+  numPixels = 500;
+  seed = random(10,1000);
+
+
+  //abstract PVector getVectorFromT( t) ;
+  //abstract void drawPoint(float x, float y) ;
+
+  constructor(smode = true) {
+    this.setSimplexMode(smode) ;
+  }
+
+   setSimplexMode( simplex) {
+     this.simplex = simplex ;
+  }
+
+  noiseEval( x,  y,  z,  t) {
+    return   this.simplex ? simplexNoise.noise4D(x,y,z,t) : noise(x,y,z) ;
+  }
+
+   draw() {
+     this.drawShape() ;
+  }
+
+  drawShape(){
+    beginShape() ;
+    for(let pixel = 0 ; pixel < this.numPixels ; pixel++){
+
+        let t = 1.0 * pixel / (this.numPixels - 1);
+
+
+        let wt = TWO_PI * (this.freq * t  - phaseTime);
+        let cs = this.rad * Math.cos(wt) ;
+        let sn = this.rad * Math.sin(wt) ;
+
+        let pos = this.getVectorFromT(t) ;
+
+        pos.x += noiseAmp * this.noiseEval(this.seed + cs, sn, this.id,0);
+        pos.y += noiseAmp * this.noiseEval(2*this.seed + cs, sn, this.id,0);
+
+        this.drawPoint(pos.x,pos.y) ;
+    }
+    endShape() ;
+
+ }
+
+  drawSinglePoint(){
+
+    for(let pixel = 0 ; pixel < this.numPixels ; pixel++){
+
+      let t = 1.0 * pixel / (this.numPixels - 1);
+
+
+        let wt = TWO_PI * (this.freq * t  - phaseTime);
+        let cs = rad * Math.cos(wt) ;
+        let sn = rad * Math.sin(wt) ;
+
+        let pos = getVectorFromT(t) ;
+        pos.x += noiseAmp * this.noiseEval(this.seed + cs, sn, this.id,0);
+        pos.y += noiseAmp * this.noiseEval(2*this.seed + cs, sn, this.id,0);
+
+        this.drawSinglePoint(pos.x,pos.y) ;
+    }
+
+ }
+
+}
+
+
+class PetalThing extends NoiseShape{
+
+ cps=[] ;
+
+ constructor() {
+  super() ;
+ }
+
+ setControlPoints(cps) {
+   this.cps = cps ;
+ }
+
+  getVectorFromT( t) {
+   let pVector = new PVector() ;
+   pVector.x  = bezierPoint(this.cps[0].x, this.cps[1].x, this.cps[2].x, this.cps[3].x,t) ;
+   pVector.y  = bezierPoint(this.cps[0].y, this.cps[1].y, this.cps[2].y, this.cps[3].y,t) ;
+   return pVector ;
+ }
+
+ drawPoint( x,  y) {
+    strokeWeight(0.25);
+    vertex(x,y) ;
+ }
+
+ drawSinglePoint( x,  y) {
+    strokeWeight(0.25);
+    stroke(0);
+    point(x,y);
+ }
+
+
+
+}
 
   // Conversion of Processing Java code
 
@@ -329,8 +453,9 @@
       text("Toggle Interpolate Colours: 'I' key", instructionXPOS, instructionYPOS + 8 * instructionFontHeight);
       text("Motion Blur: 'B' key", instructionXPOS, instructionYPOS + 9 * instructionFontHeight);
       text("Stroke/NoStroke: 'N' key", instructionXPOS, instructionYPOS + 10 * instructionFontHeight);
+      text("Noise/No Noise: 'O' key", instructionXPOS, instructionYPOS + 11 * instructionFontHeight);
 
-      text("Reset: 'R' key", instructionXPOS, instructionYPOS + 11 * instructionFontHeight);
+      text("Reset: 'R' key", instructionXPOS, instructionYPOS + 12 * instructionFontHeight);
     }
     if (hideInstructions) {
       textSize(12);
@@ -341,6 +466,23 @@
 
   }
 
+
+  // Draw Noisey version of a petal
+
+  const petals = [] ;
+
+  function drawPetalNoisey(cps, col, number) {
+    let pt ;
+     if (petals[number] === undefined) {
+        pt = new PetalThing() ;
+        petals[number]=pt ;
+     }
+
+     pt = petals[number];
+     pt.setControlPoints(cps) ;
+
+     pt.draw() ;
+  }
   // Draw a Cubic Bezier Petal from
   // four Vector points
   // PVector, colour
@@ -499,7 +641,12 @@
         iCol = col;
       }
 
-      drawPetal(cps, iCol);
+
+      if (noiseyMode) {
+        drawPetalNoisey(cps,iCol,petalNum) ;
+      } else {
+        drawPetal(cps,iCol) ;
+      }
 
       petalNum = petalNum + 1;
 
@@ -521,6 +668,7 @@
     //dt = 0.01 ;
 
     //  console.log(" moveTime = " + moveTime + ' AnimationTime '+animTime + ' animation ' + animation) ;
+    time += dt ;
 
     if (movement) {
       moveTime += dt;
@@ -568,7 +716,12 @@
       //petalLength = sinFunction(40.0f,260.0f,animTime,kPetalPeriod,0.0f) ;
     }
 
+    noiseAmp = sinFunction(10,20,phaseTime,30,0.0) ;
+    phaseTime += (dt)  ;
 
+    if (time > demoTimeOut) {
+       demoMode() ;
+    }
   }
 
   // Reset Parameters to Default Values
@@ -590,6 +743,8 @@
     motionBlur = kMotionBlur;
     hideInstructions = kHideInstructions;
     noStrk = kNoStrokeFlag;
+    noiseyMode = false ;
+    time = 0 ;
 
 
   }
@@ -680,6 +835,7 @@
 
 
   function keyPressed() {
+    time = 0 ;
 
     if (keyCode == UP_ARROW) {
       tilt = tilt + 2;
@@ -697,6 +853,8 @@
       showControlPoints = !showControlPoints;
     } else if ((key == 'r') || (key == 'R')) {
       resetPetalParameters();
+    } else if ((key == 'd') || (key == 'D')) {
+      demoMode();
     } else if ((key == 'a') || (key == 'A')) {
       animation = !animation;
       if (!animation) {
@@ -715,6 +873,8 @@
       noStrk = !noStrk;
     } else if ((key == 'h') || (key == 'H')) {
       hideInstructions = !hideInstructions;
+    } else if ((key == 'o') || (key == 'O')) {
+      noiseyMode = !noiseyMode;
     }
 
 
@@ -723,6 +883,108 @@
 
   }
 
+  function demoMode() {
+
+    switch(dMode++ % 4) {
+      case 0:
+          demoMode1() ;
+          break ;
+
+      case 1:
+          demoMode2() ;
+          break ;
+
+       case 2:
+          demoMode3() ;
+          break ;
+
+       case 3:
+          demoMode4() ;
+          break ;
+
+       default:
+          demoMode1() ;
+           break ;
+    }
+
+  }
+
+  function demoMode1() {
+     console.log("DEMO MODE 1") ;
+
+     hideInstructions  = true ;
+     rotation = true ;
+     movement = true ;
+     animation = true ;
+     numpetals = 4 ;
+     animTime = 0 ;
+     phaseTime = 0 ;
+     moveTime = 0 ;
+     noStrk = true ;
+     noiseyMode = true ;
+     motionBlur = false ;
+     stemFlower = true ;
+     time = 0 ;
+
+ }
+
+ function demoMode2() {
+     console.log("DEMO MODE 2") ;
+
+     hideInstructions  = true ;
+     rotation = true ;
+     movement = true ;
+     animation = true ;
+     numpetals = 4 ;
+     animTime = 0 ;
+     phaseTime = 0 ;
+     moveTime = 0 ;
+     noStrk = false ;
+     noiseyMode = true ;
+     motionBlur = true ;
+     stemFlower = true ;
+     time = 0 ;
+
+ }
+
+  function demoMode3() {
+     console.log("DEMO MODE 3") ;
+
+     hideInstructions  = true ;
+     rotation = true ;
+     movement = true ;
+     animation = true ;
+     numpetals = 4 ;
+     animTime = 0 ;
+     phaseTime = 0 ;
+     moveTime = 0 ;
+     noStrk = true ;
+     noiseyMode = false ;
+     motionBlur = false ;
+     stemFlower = true ;
+     time = 0 ;
+
+ }
+
+
+    function demoMode4() {
+     console.log("DEMO MODE 4") ;
+
+     hideInstructions  = true ;
+     rotation = true ;
+     movement = true ;
+     animation = true ;
+     numpetals = 4 ;
+     animTime = 0 ;
+     phaseTime = 0 ;
+     moveTime = 0 ;
+     noStrk = false ;
+     noiseyMode = false ;
+     motionBlur = false ;
+     stemFlower = true ;
+     time = 0 ;
+
+ }
 
 
   </script>
