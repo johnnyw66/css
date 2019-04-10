@@ -1,0 +1,7 @@
+/*
+*
+* Copyright 2012, John Wilson. Brighton, East Sussex. UK
+* Licenced under the BSD License.
+* See license.txt
+*/
+find .  -name '*.lua' -exec sed -i.bck 's/@header/Copyright 2012, John Wilson, Brighton Sussex UK. Licensed under the BSD License. See licence.txt/g' {} +

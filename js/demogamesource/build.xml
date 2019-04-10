@@ -1,0 +1,75 @@
+	<project name="Compressor Test" default="dist" basedir=".">
+        <taskdef resource="yuicompressor.tasks" classpath="dist/yuicompressor-taskdef-1.0.jar"/>
+
+        <target name="compressbig" depends="copyjsfiles,concatfiles,compressind">
+
+                <yuicompressor linebreak="120" todir="lib_js">
+                        <fileset dir="lib_js" includes="jkw_all-libs.js"/>
+                        <mapper type="glob" from="*.js" to="*-min.js"/>
+                </yuicompressor>
+
+        </target>
+
+        <target name="compressind">
+
+                <yuicompressor linebreak="120" todir="${basedir}/compressed">
+                        <fileset dir="${basedir}/tmplib" includes="*.js"/>
+                        <mapper type="glob" from="*.js" to="*-min.js"/>
+                </yuicompressor>
+
+        </target>
+
+        <target name="copyjsfiles2">
+			<copy todir="${basedir}/tmplib"  overwrite="true">
+				<fileset dir="${basedir}/source/library" includes="**/*.js" >
+				</fileset>
+				<globmapper from="*.js" to="*.js"/>
+			</copy>
+		</target>
+
+
+	    <target name = "tidyup">
+	       	<echo message="tidyup - Replacing header derivertive"/>
+	      	<loadfile property="jsheader" srcFile="${basedir}/source/header.txt"/>  
+	        <replaceregexp
+				match="^\s*//\s*@header" replace="${jsheader}" flags="g"> 
+				<fileset dir="${basedir}/tmplib" includes="*.js"/>
+			</replaceregexp>
+	    </target>
+
+        <target name="copyjsfiles">
+	
+			<copy todir="${basedir}/tmplib"  overwrite="true">
+		    	<filelist dir="${basedir}/source/library"
+		         	files="LinkedList.js,Vector4.js,Vector2.js,Matrix44.js,ImageResource.js,Sprite.js,Spritesheet.js,RenderHelper.js,TextureAnim.js,Bezier.js,Event.js,Singleshotevent.js,Eventmanager.js,WorldClock.js,KDampedOscillator.js,Ktimer.js,SpringBox.js,DisplayableTextWithImage.js,Message.js,MessageManager.js,Locale.js,Spline.js,TriggerManager.js,QuadHotspot.js,ObserverEvent.js,TileMap.js,Path.js,Animation.js,Orbitor.js,Spring.js,Explosion.js,TextureParticle.js,Bullet.js,Enemy.js,EnemyPart.js,Camera.js,Explosion.js,Line2D.js,HomingMissile.js,PlayerHelicopter.js,md5.js"/>
+<!--		_3DCamera.js,_3DEdge.js,_3DTriangle.js,_3DEntity.js,_3DModel.js,_3DPolygon.js,_3DScene.js,_3DViewer.js,fanModel.js"/> -->
+		  	</copy>
+        </target>
+
+	  	<target name="clean">
+		    <delete dir="tmplib" failonerror="false" />
+		    <delete dir="compressed" failonerror="false" />
+		
+	  	</target>
+
+		<target name="makedir">
+			<mkdir dir="compressed" />
+    	</target>			
+    	
+        <target name="concatfiles">
+	
+		  	<concat destfile="lib_js/jkw_all-libs.js"
+		          force="yes">
+		    	<filelist dir="${basedir}/tmplib"
+		         	files="LinkedList.js,Vector4.js,Vector2.js,Matrix44.js,ImageResource.js,Sprite.js,Spritesheet.js,RenderHelper.js,TextureAnim.js,Bezier.js,Event.js,Singleshotevent.js,Eventmanager.js,WorldClock.js,KDampedOscillator.js,Ktimer.js,SpringBox.js,DisplayableTextWithImage.js,Message.js,MessageManager.js,Locale.js,Spline.js,TriggerManager.js,QuadHotspot.js,ObserverEvent.js,TileMap.js,Path.js,Animation.js,Orbitor.js,Spring.js,Explosion.js,TextureParticle.js,Bullet.js,Enemy.js,EnemyPart.js,Camera.js,Explosion.js,Line2D.js,HomingMissile.js,PlayerHelicopter.js,md5.js"/>
+<!--		,_3DCamera.js,_3DEdge.js,_3DTriangle.js,_3DEntity.js,_3DModel.js,_3DPolygon.js,_3DScene.js,_3DViewer.js,fanModel.js"/> -->
+		  	</concat>
+		
+        </target>
+
+        <target name="dist" depends="clean,makedir,compressbig,tidyup">
+			
+		</target>
+
+
+</project>
