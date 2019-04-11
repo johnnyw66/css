@@ -1,3 +1,7 @@
+body {
+  background: whiteSmoke;
+
+}
 .container,
 .header,
 .footer {
@@ -14,19 +18,20 @@
 .header {
   height: 10px;
   border-bottom: 1px solid #EEE;
-  background-color: #ffffff;
+  background-color: whiteSmoke;
 }
 
 .footer {
   height: 40px;
   background-color: whiteSmoke;
   border-top: 1px solid #DDD;
+  text-align: center;
 }
 
 .info {
   width: 30%;
   float: left;
-  background: #bbb;
+  background: whiteSmoke;
   height: 100%;
   padding:4px;
 
@@ -35,6 +40,6 @@
 .sketch {
   width: 68%;
   float: right;
-  background: #aaa;
+  background: whiteSmoke;
   height: 100%;
 }
