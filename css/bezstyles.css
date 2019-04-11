@@ -28,10 +28,12 @@
   float: left;
   background: #bbb;
   height: 100%;
+  padding:4px;
+
 }
 
 .sketch {
-  width: 70%;
+  width: 68%;
   float: right;
   background: #aaa;
   height: 100%;
