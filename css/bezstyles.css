@@ -1,28 +1,38 @@
-
-
-body {
-
+.container,
+.header,
+.footer {
+  padding: 10px;
 }
 
-li {
-  line-height: 1.5em;
+.container {
+  margin-top: 0;
+  min-height: 150px;
+  max-height: 900px;
+  overflow: auto;
 }
 
+.header {
+  height: 10px;
+  border-bottom: 1px solid #EEE;
+  background-color: #ffffff;
+}
+
+.footer {
+  height: 40px;
+  background-color: whiteSmoke;
+  border-top: 1px solid #DDD;
+}
 
 .info {
   width: 30%;
-  display: inline-block;
-  margin: 0;
-  border: 1px solid #CCC;
+  float: left;
+  background: #bbb;
+  height: 100%;
 }
 
 .sketch {
-  width: auto;
-  display: inline-block;
-  margin: 0;
-  border: 1px solid #CCC;
-}
-
-footer {
-  border: 10px solid #CCC;
+  width: 70%;
+  float: right;
+  background: #aaa;
+  height: 100%;
 }
