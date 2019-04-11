@@ -79,7 +79,9 @@ function setup() {
   ctlPt1     =  new PVector() ;
   ctlPt2     =  new PVector() ;
 
-  createCanvas(sWidth, sHeight, P2D);
+  let cnv = createCanvas(sWidth, sHeight, P2D);
+  cnv.parent("sketch-holder")
+
   stroke(255);
   ellipseMode(CENTER);
   rectMode(CENTER);

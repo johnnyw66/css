@@ -1,15 +1,28 @@
 
 
 body {
-  margin: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+
 }
+
 li {
   line-height: 1.5em;
 }
 
-#c1 {
-  margin: 10px;
+
+.info {
+  width: 30%;
+  display: inline-block;
+  margin: 0;
+  border: 1px solid #CCC;
+}
+
+.sketch {
+  width: auto;
+  display: inline-block;
+  margin: 0;
+  border: 1px solid #CCC;
+}
+
+footer {
+  border: 10px solid #CCC;
 }

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Bad Style</title>
+  <style>
+
+  .info {
+    width: 30%;
+    display: inline-block;
+    margin: 0;
+    border: 1px solid #CCC;
+  }
+
+  .sketch {
+    width: 60%;
+    display: inline-block;
+    margin: 0;
+    border: 1px solid #CCC;
+  }
+
+  footer {
+    border: 10px solid #CCC;
+  }
+
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.3/p5.js"></script>
+
+  <script>
+
+  function setup() {
+      let cnv = createCanvas(800,600);
+      cnv.parent("sketch-holder")
+  }
+
+  function draw() {
+    rect(0,0,width - 1, height - 1) ;
+    line(0,0,width,height) ;
+    line(0,height,width,0) ;
+
+  }
+  </script>
+
+</head>
+
+<body>
+  <div class='info'>
+      <p>
+        <h1>TEXT BLOCK</h1>
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nam aliquam sem et tortor. Vitae et leo duis ut diam quam nulla porttitor. Eget magna fermentum iaculis eu non. Accumsan sit amet nulla facilisi morbi tempus iaculis urna. Velit sed ullamcorper morbi tincidunt ornare massa eget egestas. Morbi leo urna molestie at elementum eu facilisis sed odio. Dui vivamus arcu felis bibendum ut tristique et egestas. Sapien et ligula ullamcorper malesuada proin libero nunc. Orci a scelerisque purus semper. Donec massa sapien faucibus et molestie ac feugiat.
+      </p>
+
+      <p>
+        Nisl nisi scelerisque eu ultrices vitae auctor. Mattis enim ut tellus elementum sagittis vitae et. Amet consectetur adipiscing elit ut aliquam. Congue quisque egestas diam in. Quisque id diam vel quam. Id leo in vitae turpis massa. Nisl purus in mollis nunc sed id semper. Mattis rhoncus urna neque viverra justo nec ultrices dui sapien. Lacus suspendisse faucibus interdum posuere. Donec pretium vulputate sapien nec. Vitae auctor eu augue ut lectus arcu.
+      </p>
+
+      Id consectetur purus ut faucibus. Ac feugiat sed lectus vestibulum mattis ullamcorper velit sed ullamcorper. At erat pellentesque adipiscing commodo elit. Sed blandit libero volutpat sed cras ornare arcu. Mattis vulputate enim nulla aliquet porttitor lacus luctus accumsan tortor. Integer feugiat scelerisque varius morbi enim. Vulputate odio ut enim blandit volutpat maecenas volutpat. Eleifend quam adipiscing vitae proin sagittis nisl rhoncus mattis rhoncus. Arcu dui vivamus arcu felis. Tincidunt tortor aliquam nulla facilisi cras fermentum odio eu feugiat. Ullamcorper velit sed ullamcorper morbi tincidunt ornare massa eget.
+
+
+  </div>
+  <div id="sketch-holder" class='sketch'>
+  <!-- Our sketch will go here! -->
+  </div>
+  <p>Brilliant!</p>
+  <footer>
+    some footer
+  </footer>
+</body>
+</html>

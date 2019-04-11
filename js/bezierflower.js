@@ -129,7 +129,8 @@ function setup() {
 
   movementAmplitude = petalLength / 4;
 
-  createCanvas(displayWidth, displayHeight, P2D);
+  let cnv = createCanvas(displayWidth, displayHeight, P2D);
+  cnv.parent("sketch-holder")
 
 }
 

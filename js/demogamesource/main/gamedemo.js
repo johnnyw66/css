@@ -162,8 +162,8 @@
 
 		var 	messages	=	[
 
-								Locale.GetLocaleText("Javascript demo - John Wilson"),
-								"Programming: 2.5 Weeks work,in progress",
+								Locale.GetLocaleText("Javascript demo"),
+								"Programming: 2.5 Weeks work",
 								"Based on orignal code I wrote in Lua",
 								"Tilemap and level exported from DAME Editor",
 								"Vector and Spline Paths",
@@ -753,8 +753,8 @@
 				var ty		=	6*Math.sin(gameTime*6*5) ;
 				rHelper.drawText("USE ARROW KEYS,Q,W,E,A,D,Z,X & C - OR CLICK ON OBJECT TO FOLLOW.",DISPLAYWIDTH*0.5,60+ty,[255,255,255],{horizontal:"center",vertical:"top"},"italic 20pt Calibri",cAlpha) ;
 			}
-			rHelper.drawText("RETRO GAME DEMO - JOHN WILSON 2012",DISPLAYWIDTH*0.5,10,[255,255,0],{horizontal:"center",vertical:"top"},"italic 30pt Calibri",cAlpha) ;
-			rHelper.drawText("3: DEMO PURPOSES ONLY :GRAPHICS ARE COPYRIGHT SEGA",DISPLAYWIDTH*0.5,100,[0,0,0],{horizontal:"center",vertical:"top"},"italic 16pt Calibri",textAlpha) ;
+			rHelper.drawText("RETRO GAME DEMO - (C) JOHN WILSON 2012",DISPLAYWIDTH*0.5,10,[255,255,0],{horizontal:"center",vertical:"top"},"italic 30pt Calibri",cAlpha) ;
+			rHelper.drawText("DEMO PURPOSES ONLY. GRAPHICS ARE COPYRIGHT SEGA",DISPLAYWIDTH*0.5,100,[0,0,0],{horizontal:"center",vertical:"top"},"italic 16pt Calibri",textAlpha) ;
 
 			rHelper.drawText(hCodeRH+":jwilson:"+"2019",10,560,[255,255,255],{horizontal:"left",vertical:"top"},"italic 8pt Calibri",cAlpha) ;
 
