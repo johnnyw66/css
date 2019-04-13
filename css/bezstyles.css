@@ -2,6 +2,11 @@ body {
   background: whiteSmoke;
 
 }
+a {
+  text-decoration: none;
+  background-color: transparent;
+
+}
 .container,
 .header,
 .footer {
@@ -36,7 +41,24 @@ body {
   padding:4px;
 
 }
+.social-media-icon {
+    padding: 10px ;
+}
 
+ul.navbar-nav {
+  /* display: inline-block; */
+  padding: 0;
+  margin: 0;
+}
+
+li.nav-item {
+  display: inline-block;
+  padding-left: 10px;
+}
+
+li {
+  height: 1.5em;
+}
 .sketch {
   width: 68%;
   float: right;
