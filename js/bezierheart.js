@@ -10,6 +10,23 @@ const heartHeight = 340;
 let time = 0;
 let heart2, heart3;
 
+// sinFunction,cosFunction - Helper functions for auto animation of Parameter values
+// Parameters are changed over a 'period' of time (in seconds)
+// From startValue to endValue - optional phase
+// timeF is the current Time in seconds
+
+function cosFunction(startValue, endValue, timeF, period, phase) {
+  return sinFunction(startValue, endValue, timeF, period, phase + HALF_PI);
+}
+
+function sinFunction(startValue, endValue, timeF, period, phase) {
+  const yI = (startValue + endValue) / 2;
+  const freq = 1.0 / period;
+  const amp = endValue - yI;
+  return yI + amp * Math.sin(TWO_PI * timeF * freq + phase);
+}
+
+
 function setup() {
 
   displayWidth = 700;
@@ -19,13 +36,15 @@ function setup() {
   heart2 = new Heart(heartHeight, 15, 380, 65, 420);
   heart3 = new Heart(f * heartHeight, 15, f * 380, 65, 420);
 
-  let cnv = createCanvas(displayWidth, displayHeight, P2D);
+  let cnv = createCanvas(displayWidth, displayHeight, WEBGL);
   cnv.parent("sketch-holder")
 
 }
 
 
 function draw() {
+  background(0,0,0);
+
   let dt = 1 / kFrameRate; // We should calculate dt - time  passed since last update-draw
   time += dt;
 
@@ -34,8 +53,8 @@ function draw() {
   heart3.update(0.15);
 
   push();
-  translate(displayWidth/2,displayHeight/2) ;
-  scale(0.5) ;
+  const hscale = sin(6*time/4) > 0 ? 0.75 : sinFunction(0.6, 0.75, time, 0.5, 0) ;
+  scale(hscale) ;
 
   heart2.draw();
   heart3.draw();
@@ -52,7 +71,7 @@ function degreesToRadians(th) {
 class ShapeInf {
 
    getPos(tValue) {
-     throw Error("Abstract") ;
+     throw Error("Abstract class") ;
    }
 
 }
@@ -63,7 +82,6 @@ class BezierShape extends ShapeInf {
   constructor(cpa) {
     super() ;
     this.cp = [];
-
     this.create(cpa[0], cpa[1], cpa[2], cpa[3]);
   }
 
@@ -134,59 +152,40 @@ class NoiseyCurve {
 
   }
 
-  ndraw() {
-
-    let u = 0.5;
-    const spreadFactor = 32; // determines the range of the two min values (higher gives lower spread)
-    const rad = this.maginfy;
-    for (let pixel = 0; pixel < this.numPts; pixel++) {
-
-      const parTime = 1.0 * pixel / this.numPts;
-
-      const intensity = pow(2, -spreadFactor * (this.parTime - u) * (this.parTime - u)); // bell curve around 'u'
-      const sineEase = 0.5 * (1 + cos(PI * (this.parTime - 1)));
-
-      const anglePhase = TWO_PI * this.freq * this.parTime - this.phaseRate * this.phaseTime;
-      const cAngle = rad * cos(anglePhase);
-      const sAngle = rad * sin(anglePhase);
-      const nx = this.noiseEval(2 * this.seed + cAngle, sAngle, 17 * this.parTime, this.id);
-      const ny = this.noiseEval(3 * this.seed + cAngle, sAngle, 17 * this.parTime, this.id);
-      const dx = intensity * this.amp * nx;
-      const dy = intensity * this.amp * ny;
-
-      //stroke(255, (1 - sineEase) * 255);
-      //strokeWeight(2.0);
-      let pos = this.shape.getPos(parTime);
-      console.log("NoiseyCurve:draw",pos.x, pos.y) ;
-
-      point(pos.x + dx, pos.y + 3 * dy);
-    }
-  }
 
   draw() {
+
     const u = 0.5;
     const spreadFactor = 32; // determines the range of the two min values (higher gives lower spread)
     const rad = this.maginfy;
+    const seed = this.seed ;
+    const amp = this.amp ;
+    const freq = this.freq ;
+    const numPts = this.numPts ;
+    const id = this.id ;
+    const phaseRate = this.phaseRate ;
+    const phaseTime = this.phaseTime ;
+    const shape = this.shape ;
 
-    for (let pixel = 0; pixel < this.numPts; pixel++) {
+    for (let pixel = 0; pixel < numPts; pixel++) {
 
-      const parTime = 1.0 * pixel / this.numPts;
-      const intensity = 1 ; //pow(2, -spreadFactor * (this.parTime - u) * (this.parTime - u)); // bell curve around 'u'
-      const sineEase = 0.5 * (1 + cos(PI * (this.parTime - 1)));
+      const parTime = 1.0 * pixel / numPts;
+      const intensity =  pow(2.0, -spreadFactor * (parTime - u) * (parTime - u)); // bell curve around 'u'
+      const sineEase = 0.5 * (1.0 + cos(PI * (parTime - 1)));
 
-      const anglePhase = TWO_PI * this.freq * this.parTime - this.phaseRate * this.phaseTime;
+      const anglePhase = TWO_PI * freq * parTime - phaseRate * phaseTime;
       const cAngle = rad * cos(anglePhase);
       const sAngle = rad * sin(anglePhase);
-      const nx = this.noiseEval(2 * this.seed + cAngle, sAngle, 17 * this.parTime, this.id);
-      const ny = this.noiseEval(3 * this.seed + cAngle, sAngle, 17 * this.parTime, this.id);
-      const dx =  intensity * this.amp * nx;
-      const dy =  intensity * this.amp * ny;
+      const nx = this.noiseEval(2 * seed + cAngle, sAngle, 17 * parTime, id);
+      const ny = this.noiseEval(3 * seed + cAngle, sAngle, 17 * parTime, id);
+      const dx =  intensity * amp * nx;
+      const dy =  intensity * amp * ny;
 
-
-      stroke(0);
+      stroke(255, (1 - sineEase) * 255);
       strokeWeight(2.0);
-      let pos = this.shape.getPos(parTime);
-      //point(pos.x, pos.y);
+
+      const pos = shape.getPos(parTime);
+
       point(pos.x + dx, pos.y + 3 * dy);
 
     }
@@ -293,11 +292,10 @@ class Heart extends CurveShape {
   draw() {
 
     super.draw();
-    this.drawControlPoints() ;
+    //this.drawControlPoints() ;
   }
 
 }
-
 
 
 
@@ -328,8 +326,8 @@ class PVector {
 
   rotate(theta) {
     const temp = this.x;
-    const sn = Math.sin(theta);
-    const cs = Math.cos(theta);
+    const sn = sin(theta);
+    const cs = cos(theta);
     this.x = this.x * cs - this.y * sn
     this.y = temp * sn + this.y * cs;
     return this;
