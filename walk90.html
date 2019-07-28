@@ -1,0 +1,339 @@
+<html>
+<h1>Parcel Labeller Walk 90 Princes Cres</h1>
+Street Name:
+<select name="street" id='streetselect'>
+  <option value="aymer rd">Aymer Rd</option>
+  <option value="church rd">Church Rd</option>
+  <option value="kingsway">Kingsway</option>
+  <option value="new church rd">New Church Rd</option>
+  <option value="princes ave">Princes Ave</option>
+  <option value="princes cres">Princes Cres</option>
+  <option value="princes sq">Princes Sq</option>
+  <option value="westbourne villas">Westbourne Villas</option>
+  <option value="westbourne plc">Westbourne Plc</option>
+
+
+  <option value="aymer house">Aymer House</option>
+  <option value="barford court">Barford Court</option>
+  <option value="fairlawns">Fairlawns</option>
+  <option value="blenheim">Blenheim Court #09860</option>
+  <option value="pembroke">Pembroke Court #1956</option>
+  <option value="wendover grange">Wendover Grange</option>
+  <option value="miles walk">Miles Walk  #1450</option>
+  <option value="matthew house">Matthew House #1450</option>
+  <option value="50 new church rd">50 New Church Rd #6482</option>
+  <option value="52 new church rd">52 New Church Rd #5371</option>
+ 	
+</select>
+<br>
+Street Number: <input type="text" id='streetnum' name="streetnumber"><br>
+
+<button type="button" id='findsection'>Show Section</button>
+<br>
+
+<!--
+Section Number: <input type="number" id='sectionnum' name="sectionnumber"><br>
+<button type="button" id='findstreet'>Show Street</button>
+-->
+
+<script>
+var sections = [] ;
+
+class RangeId {
+	
+	constructor(id) {
+		this.id = id ;
+	}
+	
+	compare(id) {
+		console.log("Compare " + id  + " with " + this.id)
+	 	return this.id.toLowerCase().trim() == id.toLowerCase().trim() ;
+	}
+
+	toString() {
+		return 'range ' + this.id ;
+	}
+
+}
+
+class RangeAll {
+	
+	constructor() {
+	}
+	
+	compare(id) {
+		return true ;
+	}
+
+	toString() {
+		return 'rangeAll' ;
+	}
+
+}
+
+class RangeValue {
+	constructor(val) {
+		this.val = val;
+	}
+	
+	 compare(val) {
+		return this.val == val ;
+	}
+	toString() {
+		return 'range val = ' + this.val  ;
+	}
+	
+}
+class Range {
+	
+	constructor(from,to) {
+		this.from = from;
+		this.to = to ;
+	}
+	
+	 compare(val) {
+		let c =  (((val & 1) == (this.from & 1)) || ((val & 1) == (this.from & 1))) 
+		&& (val >= Math.min(this.from,this.to) && val <= Math.max(this.from,this.to)); 
+		console.log("Compare Range [" + this.from  + "-" + this.to + "] with given value" + val + " compare " + c)
+		return c ;
+	}
+	toString() {
+		return 'range ' + this.from + ':' + this.to ;
+	}
+}
+
+class Section {
+
+	constructor(sectionid,streetname) {
+		this.sectionid = sectionid ;
+		this.streetname = streetname ;
+		this.ranges =  [] ;
+	}
+	
+	add(range) {
+		this.ranges.push(range) ;
+		return this ;
+	}
+	
+	compare(streetname,streetnumber) {
+		if (this.streetname == streetname) {
+			for (let rangeId in this.ranges) {
+				if (this.ranges[rangeId].compare(streetnumber)) {
+ 					return true ;
+				}
+			} 
+		}
+		return false ;
+	}
+	
+	getSectionId() {
+		return this.sectionid ;
+	}
+	
+	getStreetName() {
+		return this.streetname ;
+	}
+	
+	toString() {
+		var str = 'section ' + this.sectionid + ' street ' + this.streetname + " ";
+		this.ranges.forEach( (range) => {
+            str = str + range.toString() + '\n';
+        }) ;
+		return str ;
+		
+	}
+}
+
+
+function findSectionId(streetname,streetnumber) {
+	
+	
+	for(let sectionId in sections) {
+		let section = sections[sectionId] ;
+		console.log(section.toString()) ;
+		if (section.compare(streetname,streetnumber)) {
+			return section.getSectionId() ;
+		}
+		
+	} ;
+	throw 'Can not find section' ; 
+}
+
+
+document.getElementById('findsection').onclick = function(e){
+  var el = document.getElementById("streetselect");
+  var streetId = el.options[el.selectedIndex].value;
+  var streetText = el.options[el.selectedIndex].text;
+  var streetNumber=document.getElementById("streetnum").value;
+
+  var streetDiv = document.getElementById("street");
+  var sectionDiv = document.getElementById("section");
+  var errorDiv = document.getElementById("error");
+
+  streetDiv.innerHTML = "" ;
+  sectionDiv.innerHTML = "" ;
+  errorDiv.innerHTML = "" ;
+
+  try {
+	let sectionId = findSectionId(streetId,streetNumber) ;
+    sectionDiv.innerHTML = " SECTION NUMBER: " + sectionId;
+
+    var streetMessage = streetNumber + " " + streetText ; 
+    streetDiv.innerHTML = streetMessage;
+
+
+  } catch(err) { 
+    errorDiv.innerHTML = "Error " +  err;
+
+  }
+}
+
+
+//document.getElementById('findstreet').onclick = function(e){
+//  var sectionNumber=document.getElementById("sectionnum").value;
+//}
+
+
+
+	sections.push(new Section(1,'church rd')
+					.add(new Range(170,216))) ;
+					
+	sections.push(new Section(2,'new church rd')
+					.add(new Range(2,10))) ;
+					
+	sections.push(new Section(3,'aymer rd')
+								.add(new Range(2,30))) ;
+
+	sections.push(new Section(3,'aymer house')
+								.add(new RangeAll())) ;
+
+	sections.push(new Section(4,'princes ave')
+					.add(new RangeId('2a'))
+					.add(new RangeId('2b'))
+					.add(new Range(5,7))
+					.add(new Range(2,16))) ;
+	
+	sections.push(new Section(5,'aymer rd')
+					.add(new Range(23,1))) ;
+					
+	sections.push(new Section(6,'new church rd')
+							.add(new Range(14,18))) ;
+
+	sections.push(new Section(7,'new church rd')
+							.add(new Range(20,26))) ;
+	
+	sections.push(new Section(8,'princes sq')
+						.add(new Range(11,1))) ;
+	
+	
+	sections.push(new Section(9,'princes cres')
+									.add(new Range(19,17)))  ;
+	
+	sections.push(new Section(10,'barford court')
+								.add(new RangeAll()))  ;
+	
+	
+	sections.push(new Section(10,'kingsway')
+								.add(new RangeValue(157)))  ;
+	
+	sections.push(new Section(11,'princes cres')
+									.add(new Range(15,3)))  ;
+
+	sections.push(new Section(12,'kingsway')
+								.add(new Range(153,139)))  ;
+	
+	sections.push(new Section(13,'kingsway')
+					.add(new RangeValue(159)))  ;
+
+	sections.push(new Section(13,'fairlawns')
+					.add(new RangeAll()))  ;
+	
+	
+	sections.push(new Section(14,'princes cres')
+									.add(new Range(2,18)))  ;
+	
+	sections.push(new Section(15,'princes sq')
+						.add(new Range(2,20))) ;
+
+
+	sections.push(new Section(16,'new church rd')
+						.add(new Range(28,42))) ;
+	
+
+	sections.push(new Section(17,'wendover grange')
+											.add(new RangeAll())) ;
+
+	sections.push(new Section(17,'westbourne villas')
+						.add(new RangeValue(30))
+						.add(new RangeValue(31))
+						.add(new RangeValue(32))) ;
+
+	sections.push(new Section(18,'westbourne plc')
+											.add(new Range(1,45))
+											.add(new Range(46,2))
+											.add(new RangeId('2a'))) ;
+						
+	sections.push(new Section(19,'westbourne villas')
+											.add(new Range(33,54))
+											.add(new RangeValue(1))
+											.add(new Range(2,29))) ;
+											
+	sections.push(new Section(20,'new church rd')
+							.add(new RangeValue(50))) ;
+	
+	sections.push(new Section(20,'50 new church rd')
+									.add(new RangeAll())) ;
+
+	
+	sections.push(new Section(21,'new church rd')
+									.add(new RangeValue(52))) ;
+
+	sections.push(new Section(21,'52 new church rd')
+									.add(new RangeAll())) ;
+	
+	sections.push(new Section(22,'new church rd')
+								.add(new Range(31,19))) ;
+
+
+	sections.push(new Section(23,'new church rd')
+								.add(new RangeValue(17))) ;
+
+	sections.push(new Section(23,'blenheim')
+									.add(new RangeAll())) ;
+	
+	sections.push(new Section(24,'new church rd')
+							.add(new RangeValue(15))) ;
+								
+	sections.push(new Section(24,'pembroke')
+							.add(new RangeAll())) ;
+
+
+	sections.push(new Section(25,'new church rd')
+								.add(new Range(13,1))) ;
+
+
+	sections.push(new Section(26,'church rd')
+								.add(new Range(197,171))) ;
+
+	
+	sections.push(new Section(27,'miles walk')
+								.add(new RangeAll())) ;
+
+	sections.push(new Section(27,'matthew house')
+								.add(new RangeAll())) ;
+	
+</script>
+
+<div id='error'>
+	
+</div>
+
+<div id='section'>
+	
+</div>
+
+<div id='street'>
+	
+</div>
+
+</html>
