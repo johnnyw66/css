@@ -1,7 +1,11 @@
 <html>
-<h1>Parcel Labeller Walk 90 Princes Cres</h1>
-Street Name:
+<body onload='onLoad()'>
+
+<h1>Walk 90 Princes Cres</h1>
+
 <select name="street" id='streetselect'>
+
+  <!--
   <option value="aymer rd">Aymer Rd</option>
   <option value="church rd">Church Rd</option>
   <option value="kingsway">Kingsway</option>
@@ -13,23 +17,61 @@ Street Name:
   <option value="westbourne plc">Westbourne Plc</option>
 
 
-  <option value="aymer house">Aymer House</option>
-  <option value="barford court">Barford Court</option>
-  <option value="fairlawns">Fairlawns</option>
-  <option value="blenheim">Blenheim Court #09860</option>
-  <option value="pembroke">Pembroke Court #1956</option>
-  <option value="wendover grange">Wendover Grange</option>
-  <option value="miles walk">Miles Walk  #1450</option>
   <option value="matthew house">Matthew House #1450</option>
+-->
+
+  <!-- New Menu System -->
+
+  <option value="church rd even">Church Road (even) 174-216</option>
+  <option value="new church rd 2-8">New Church Road 2-8</option>
+  <option value="aymer house">Aymer House 10-12 New Church Road</option>
+  <option value="aymer rd even">Aymer Road (even) 2-30</option>
+  <option value="princes ave">Princes Ave (all)</option>
+  <option value="aymer rd odd">Aymer Road (odd) 23-1</option>
+  <option value="new church rd 14-28">New Church Road 14-28</option>
+  <option value="princes sq 19-1">Princes Sq (odd) 19-1</option>
+  <option value="barford court">Barford Court</option>
+  <option value="princes cres 19-3">Princes Cres (19-3)</option>
+  <option value="kingsway 151-141">Kingsway (151-141)</option>
+  <option value="fairlawns">Fairlawns 159 Kingsway</option>
+  <option value="princes cres 2-18">Princes Cres (19-3)</option>
+  <option value="princes sq 2-20">Princes Sq (even) 2-20</option>
+  <option value="new church rd 30-42">New Church Road 30-42</option>
+  <option value="wendover grange">Wendover Grange</option>
+  <option value="westbourne villas 30-32">Westbourne Villas 30-32</option>
+  <option value="westbourne plc">Westbourne Plc All</option>
+  <option value="westbourne villas 33-54">Westbourne Villas 33-54</option>
+  <option value="westbourne villas 1-29">Westbourne Villas 1-29</option>
   <option value="50 new church rd">50 New Church Rd #6482</option>
   <option value="52 new church rd">52 New Church Rd #5371</option>
- 	
+  <option value="new church rd 29-19">New Church Rd 29-19</option>
+  <option value="blenheim">Blenheim Court #09860</option>
+  <option value="pembroke">Pembroke Court #1956</option>
+  <option value="new church rd 13-1">New Church Rd 13-1</option>
+  <option value="church rd odd">Church Road odd 197-171</option>
+  <option value="miles walk">Miles Walk  #1450</option>
+
+
+<!--
+  <option value="aymer rd even">Aymer Road (even)</option>
+  <option value="aymer rd odd">Aymer Road (odd)</option>
+  <option value="church rd even">Church Road (even)</option>
+  <option value="church rd odd">Church Road (odd)</option>
+
+  <option value="new church rd even">New Church Road (even)</option>
+  <option value="new church rd odd">New Church Road (odd)</option>
+-->
+
 </select>
 <br>
+<!--
 Street Number: <input type="text" id='streetnum' name="streetnumber"><br>
+-->
 
-<button type="button" id='findsection'>Show Section</button>
+<button type="button" id='incparcels'>Add Parcel</button>
+<button type="button" id='decparcels'>Remove Parcel</button></button>
 <br>
+
 
 <!--
 Section Number: <input type="number" id='sectionnum' name="sectionnumber"><br>
@@ -37,14 +79,140 @@ Section Number: <input type="number" id='sectionnum' name="sectionnumber"><br>
 -->
 
 <script>
+
+
+function setCookie(cname, cvalue, exhours) {
+  var d = new Date();
+  d.setTime(d.getTime() + (exhours*60*60*1000));
+  var expires = "expires="+ d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookieOrDefault(cname,defValue) {
+  let cv = getCookie(cname) ;
+  if (cv == null) {
+    return defValue ;
+  } else {
+    return cv ;
+  }
+}
+function getCookie(cname) {
+  var name = cname + "=";
+  var decodedCookie = decodeURIComponent(document.cookie);
+  var ca = decodedCookie.split(';');
+  for(var i = 0; i <ca.length; i++) {
+    var c = ca[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return null;
+}
+
+
+
+
+function leadingZero(val) {
+  if (val < 10) {
+    return "0" + val ;
+  } else {
+    return "" + val ;
+  }
+}
+
+function displayTime(time) {
+
+  var hours = Math.floor(time / 3600) ;
+  var mins = Math.floor((time - hours*3600)  / 60) ;
+  var secs = time % 60;
+
+  var hrs = leadingZero(hours) ;
+  var mns = leadingZero(mins) ;
+  var sc = leadingZero(secs) ;
+
+
+  var fstr = `TIME ${hrs}:${mns}:${sc}` ;
+  var timeDiv = document.getElementById("time");
+  timeDiv.innerHTML = fstr;
+
+}
+
+
+
+class Timer {
+
+    constructor(time,pause) {
+      this.time = time ;
+      this.pause = pause ;
+
+    }
+
+    setTime(time) {
+      this.time = time ;
+    }
+
+    setPause(pause) {
+      this.pause = pause ;
+    }
+
+    getTime() {
+      return this.time ;
+    }
+
+
+    updateSecond() {
+      if (!this.pause) {
+        this.time++ ;
+      }
+      console.log("Time = " + this.time) ;
+    }
+
+    jsonEncode() {
+      var obj = {time: this.time, pause: this.pause} ;
+      return JSON.stringify(obj) ;
+    }
+
+    jsonDecode(jsonStr) {
+
+      try {
+        var obj = JSON.parse(jsonStr) ;
+
+         if (obj.time != undefined) {
+          this.time = obj.time ;
+        } else {
+          this.time = 0 ;
+        }
+
+        if (obj.pause != undefined) {
+          this.pause = obj.pause ;
+        } else {
+          this.pause = true ;
+        }
+
+      } catch(e) {
+        console.log(e);
+
+      }
+
+      return this ;
+    }
+
+}
+
+
 var sections = [] ;
+var time = new Timer(0,true) ;
+time.jsonDecode(getCookieOrDefault("time",JSON.stringify({ time:0, pause:false }))) ;
 
 class RangeId {
-	
+
 	constructor(id) {
 		this.id = id ;
 	}
-	
+
 	compare(id) {
 		console.log("Compare " + id  + " with " + this.id)
 	 	return this.id.toLowerCase().trim() == id.toLowerCase().trim() ;
@@ -57,10 +225,10 @@ class RangeId {
 }
 
 class RangeAll {
-	
+
 	constructor() {
 	}
-	
+
 	compare(id) {
 		return true ;
 	}
@@ -75,28 +243,29 @@ class RangeValue {
 	constructor(val) {
 		this.val = val;
 	}
-	
+
 	 compare(val) {
 		return this.val == val ;
 	}
 	toString() {
 		return 'range val = ' + this.val  ;
 	}
-	
+
 }
 class Range {
-	
+
 	constructor(from,to) {
 		this.from = from;
 		this.to = to ;
 	}
-	
+
 	 compare(val) {
-		let c =  (((val & 1) == (this.from & 1)) || ((val & 1) == (this.from & 1))) 
-		&& (val >= Math.min(this.from,this.to) && val <= Math.max(this.from,this.to)); 
+		let c =  (((val & 1) == (this.from & 1)) || ((val & 1) == (this.to & 1)))
+		&& (val >= Math.min(this.from,this.to) && val <= Math.max(this.from,this.to));
 		console.log("Compare Range [" + this.from  + "-" + this.to + "] with given value" + val + " compare " + c)
 		return c ;
 	}
+
 	toString() {
 		return 'range ' + this.from + ':' + this.to ;
 	}
@@ -108,232 +277,417 @@ class Section {
 		this.sectionid = sectionid ;
 		this.streetname = streetname ;
 		this.ranges =  [] ;
-	}
-	
+    this.totalparcels = 0 ;
+    this.time = time ;
+    this.pause = true ;
+  }
+
+
+  jsonEncode() {
+    var obj = {time: this.time, pause: this.pause, parcels: this.totalparcels} ;
+    return JSON.stringify(obj) ;
+  }
+
+  jsonDecode(jsonStr) {
+    try {
+      var obj = JSON.parse(jsonStr) ;
+      if (obj.totalparcels != undefined) {
+        this.totalparcels = obj.totalparcels ;
+      } else {
+        this.totalparcels = 0 ;
+      }
+
+      if (obj.time != undefined) {
+        this.time = obj.time ;
+      } else {
+        this.time = 0 ;
+      }
+
+      if (obj.pause != undefined) {
+        this.pause = obj.pause ;
+      } else {
+        this.pause = true ;
+      }
+
+    } catch(e) {
+      console.log(e);
+    }
+  }
+
+  startSection(time) {
+    this.startSection = time ;
+    this.pause = false ;
+  }
+
+  stopSection(time) {
+    this.startSection = time ;
+    this.pause = false ;
+  }
+
+  unpauseSection() {
+   this.pause = false ;
+  }
+
+  pauseSection(time) {
+    this.stopSection = time ;
+    this.pause = true ;
+  }
+
+
+  setParcelCount(count) {
+    this.totalparcels = count ;
+  }
+
+  addParcel() {
+    this.totalparcels++ ;
+  }
+
+  removeParcel() {
+    this.totalparcels-- ;
+    if (this.totalparcels < 0) {
+      this.totalparcels = 0 ;
+    }
+  }
+
 	add(range) {
 		this.ranges.push(range) ;
 		return this ;
 	}
-	
+
 	compare(streetname,streetnumber) {
 		if (this.streetname == streetname) {
 			for (let rangeId in this.ranges) {
 				if (this.ranges[rangeId].compare(streetnumber)) {
  					return true ;
 				}
-			} 
+			}
 		}
 		return false ;
 	}
-	
+
+  getParcelTotal() {
+    return this.totalparcels ;
+  }
 	getSectionId() {
 		return this.sectionid ;
 	}
-	
+
 	getStreetName() {
 		return this.streetname ;
 	}
-	
+
 	toString() {
-		var str = 'section ' + this.sectionid + ' street ' + this.streetname + " ";
+		var str = 'section ' + this.sectionid + ' street ' + this.streetname + " : " + "parcels " + this.totalparcels + " : ";
 		this.ranges.forEach( (range) => {
             str = str + range.toString() + '\n';
         }) ;
 		return str ;
-		
+
 	}
 }
 
+function findSection(streetname,streetnumber) {
 
-function findSectionId(streetname,streetnumber) {
-	
-	
+
 	for(let sectionId in sections) {
 		let section = sections[sectionId] ;
 		console.log(section.toString()) ;
 		if (section.compare(streetname,streetnumber)) {
-			return section.getSectionId() ;
+			return section ;
 		}
-		
+
 	} ;
-	throw 'Can not find section' ; 
+	throw 'Can not find section' ;
 }
 
 
-document.getElementById('findsection').onclick = function(e){
+function findSectionId(streetname,streetnumber) {
+
+  let section = findSection(streetname,streetnumber) ;
+  return section.getSectionId() ;
+}
+
+
+
+function findSectionFromElementEntries() {
+
+  var el = document.getElementById("streetselect");
+  var streetId = el.options[el.selectedIndex].value;
+  //var streetNumber=document.getElementById("streetnum").value;
+  let section = findSection(streetId,null) ;
+  return section ;
+}
+
+function updateSectionDisplay(section) {
+  var sectionDiv = document.getElementById("section");
+  sectionDiv.innerHTML = " Section: " + section.getSectionId() + " PARCELS: "  + section.getParcelTotal() ;
+
+
+}
+
+function updateDisplay() {
   var el = document.getElementById("streetselect");
   var streetId = el.options[el.selectedIndex].value;
   var streetText = el.options[el.selectedIndex].text;
-  var streetNumber=document.getElementById("streetnum").value;
-
-  var streetDiv = document.getElementById("street");
-  var sectionDiv = document.getElementById("section");
-  var errorDiv = document.getElementById("error");
-
-  streetDiv.innerHTML = "" ;
-  sectionDiv.innerHTML = "" ;
-  errorDiv.innerHTML = "" ;
-
-  try {
-	let sectionId = findSectionId(streetId,streetNumber) ;
-    sectionDiv.innerHTML = " SECTION NUMBER: " + sectionId;
-
-    var streetMessage = streetNumber + " " + streetText ; 
-    streetDiv.innerHTML = streetMessage;
-
-
-  } catch(err) { 
-    errorDiv.innerHTML = "Error " +  err;
-
-  }
+  let section = findSection(streetId,null) ;
+  updateSectionDisplay(section) ;
 }
 
 
-//document.getElementById('findstreet').onclick = function(e){
-//  var sectionNumber=document.getElementById("sectionnum").value;
-//}
+
+function onLoad() {
+
+
+  document.getElementById('streetselect').onchange = function(e){
+    let section = findSectionFromElementEntries() ;
+    updateSectionDisplay(section) ;
+  }
+
+  document.getElementById('incparcels').onclick = function(e){
+    let section = findSectionFromElementEntries() ;
+    section.addParcel() ;
+    setCookie("sec"+section.getSectionId(),section.jsonEncode(),7) ;
+    updateSectionDisplay(section) ;
+  }
+
+
+  document.getElementById('decparcels').onclick = function(e){
+    let section = findSectionFromElementEntries() ;
+    section.removeParcel() ;
+    setCookie("sec"+section.getSectionId(),section.jsonEncode(),7) ;
+    updateSectionDisplay(section) ;
+  }
+
+  document.getElementById('resetparcels').onclick = function(e){
+    var confirmReset = document. getElementById("confirmreset") ;
+
+
+    if (confirmReset.checked) {
+      confirmReset.checked = false ;
+      console.log("Resetting Parcel count for each section ") ;
+      for(id in sections) {
+        let section = sections[id] ;
+        console.log("Resetting Parcel count section " + id) ;
+
+        section.setParcelCount(0) ;
+        setCookie("sec"+section.getSectionId(),section.getParcelTotal(),7) ;
+
+      }
+
+
+      updateDisplay() ;
+
+    }
+
+  }
+
+
+  // Uncheck 'Confirm' radio button
+  var confirmReset = document. getElementById("confirmreset") ;
+  confirmReset.checked = false ;
 
 
 
-	sections.push(new Section(1,'church rd')
-					.add(new Range(170,216))) ;
-					
-	sections.push(new Section(2,'new church rd')
-					.add(new Range(2,10))) ;
-					
-	sections.push(new Section(3,'aymer rd')
-								.add(new Range(2,30))) ;
+  updateDisplay() ;
+}
+// document.getElementById('findsection').onclick = function(e){
+//   var el = document.getElementById("streetselect");
+//   var streetId = el.options[el.selectedIndex].value;
+//   var streetText = el.options[el.selectedIndex].text;
+//
+//   var streetDiv = document.getElementById("street");
+//   var sectionDiv = document.getElementById("section");
+//   var errorDiv = document.getElementById("error");
+//
+//   streetDiv.innerHTML = "" ;
+//   sectionDiv.innerHTML = "" ;
+//   errorDiv.innerHTML = "" ;
+//
+//   try {
+// 	  let section = findSection(streetId,null) ;
+//     sectionDiv.innerHTML = " SECTION NUMBER: " + section.getSectionId() + " Total  Parcels "  + section.getParcelTotal() ;
+//     streetDiv.innerHTML = streetText;
+//
+//
+//   } catch(err) {
+//     errorDiv.innerHTML = "Error " +  err;
+//
+//   }
+// }
+//
+
+// <option value="church rd even">Church Road (even) 174-216</option>
+// <option value="new church rd 2-8">New Church Road 2-8</option>
+// <option value="aymer house">Aymer House 10-12 New Church Road</option>
+// <option value="aymer rd even">Aymer Road (even) 2-30</option>
+// <option value="princes ave">Princes Ave (all)</option>
+// <option value="aymer rd odd">Aymer Road (odd) 23-1</option>
+// <option value="new church rd 14-28">New Church Road 14-28</option>
+// <option value="princes sq odd">Princes Sq (odd) 19-1</option>
+// <option value="princes cres 19-3">Princes Cres (19-3)</option>
+// <option value="barford court">Barford Court</option>
+// <option value="kingsway 151-141">Kingsway (151-141)</option>
+// <option value="fairlawns">Fairlawns 159 Kingsway</option>
+// <option value="princes cres 2-18">Princes Cres (2-18)</option>
+// <option value="princes sq even">Princes Sq (even) 2-20</option>
+// <option value="new church rd 30-48">New Church Road 30-38</option>
+// <option value="wendover grange">Wendover Grange</option>
+// <option value="westbourne villas 30-32">Westbourne Villas 30-32</option>
+// <option value="westbourne plc">Westbourne Plc All</option>
+// <option value="westbourne villas 33-54">Westbourne Villas 33-54</option>
+// <option value="westbourne villas 1-29">Westbourne Villas 1-29</option>
+// <option value="50 new church rd">50 New Church Rd #6482</option>
+// <option value="52 new church rd">52 New Church Rd #5371</option>
+// <option value="new church rd 29-19">New Church Rd 29-19</option>
+// <option value="blenheim">Blenheim Court #09860</option>
+// <option value="pembroke">Pembroke Court #1956</option>
+// <option value="new church rd 13-1">New Church Rd 13-1</option>
+// <option value="church rd odd">Church Road odd 197-171</option>
+// <option value="miles walk">Miles Walk  #1450</option>
+
+
+
+
+  sections.push(new Section(1,'church rd even')
+          .add(new RangeAll())) ;
+
+	sections.push(new Section(2,'new church rd 2-8')
+					.add(new RangeAll())) ;
 
 	sections.push(new Section(3,'aymer house')
-								.add(new RangeAll())) ;
+						.add(new RangeAll())) ;
 
-	sections.push(new Section(4,'princes ave')
-					.add(new RangeId('2a'))
-					.add(new RangeId('2b'))
-					.add(new Range(5,7))
-					.add(new Range(2,16))) ;
-	
-	sections.push(new Section(5,'aymer rd')
-					.add(new Range(23,1))) ;
-					
-	sections.push(new Section(6,'new church rd')
-							.add(new Range(14,18))) ;
+  sections.push(new Section(4,'aymer rd even')
+          .add(new RangeAll())) ;
 
-	sections.push(new Section(7,'new church rd')
-							.add(new Range(20,26))) ;
-	
-	sections.push(new Section(8,'princes sq')
-						.add(new Range(11,1))) ;
-	
-	
-	sections.push(new Section(9,'princes cres')
-									.add(new Range(19,17)))  ;
-	
-	sections.push(new Section(10,'barford court')
+	sections.push(new Section(5,'princes ave')
+					.add(new RangeAll())) ;
+
+  sections.push(new Section(6,'aymer rd odd')
+        	.add(new RangeAll())) ;
+
+  sections.push(new Section(7,'new church rd 14-28')
+        					.add(new RangeAll())) ;
+
+	sections.push(new Section(8,'princes sq 19-1')
+						.add(new RangeAll())) ;
+
+  sections.push(new Section(9,'barford court')
+          								.add(new RangeAll()))  ;
+
+	sections.push(new Section(10,'princes cres 19-3')
+									.add(new RangeAll()))  ;
+
+	sections.push(new Section(11,'kingsway 151-141')
 								.add(new RangeAll()))  ;
-	
-	
-	sections.push(new Section(10,'kingsway')
-								.add(new RangeValue(157)))  ;
-	
-	sections.push(new Section(11,'princes cres')
-									.add(new Range(15,3)))  ;
 
-	sections.push(new Section(12,'kingsway')
-								.add(new Range(153,139)))  ;
-	
-	sections.push(new Section(13,'kingsway')
-					.add(new RangeValue(159)))  ;
+  sections.push(new Section(12,'fairlawns')
+            .add(new RangeAll()))  ;
 
-	sections.push(new Section(13,'fairlawns')
-					.add(new RangeAll()))  ;
-	
-	
-	sections.push(new Section(14,'princes cres')
-									.add(new Range(2,18)))  ;
-	
-	sections.push(new Section(15,'princes sq')
-						.add(new Range(2,20))) ;
+  sections.push(new Section(12,'kingsway 159')
+              .add(new RangeAll()))  ;
+
+	sections.push(new Section(13,'princes cres 2-18')
+									.add(new RangeAll()))  ;
 
 
-	sections.push(new Section(16,'new church rd')
-						.add(new Range(28,42))) ;
-	
+  sections.push(new Section(14,'princes sq 2-20')
+                						.add(new RangeAll()))  ;
 
-	sections.push(new Section(17,'wendover grange')
+
+  sections.push(new Section(15,'new church rd 30-42')
+                              .add(new RangeAll())) ;
+
+	sections.push(new Section(16,'wendover grange')
 											.add(new RangeAll())) ;
 
-	sections.push(new Section(17,'westbourne villas')
-						.add(new RangeValue(30))
-						.add(new RangeValue(31))
-						.add(new RangeValue(32))) ;
+	sections.push(new Section(17,'westbourne villas 30-32')
+						.add(new RangeAll())) ;
 
-	sections.push(new Section(18,'westbourne plc')
-											.add(new Range(1,45))
-											.add(new Range(46,2))
-											.add(new RangeId('2a'))) ;
-						
-	sections.push(new Section(19,'westbourne villas')
-											.add(new Range(33,54))
-											.add(new RangeValue(1))
-											.add(new Range(2,29))) ;
-											
-	sections.push(new Section(20,'new church rd')
-							.add(new RangeValue(50))) ;
-	
-	sections.push(new Section(20,'50 new church rd')
+  sections.push(new Section(18,'westbourne plc')
+            .add(new RangeAll())) ;
+
+  sections.push(new Section(19,'westbourne villas 33-54')
+          	.add(new RangeAll())) ;
+
+  sections.push(new Section(20,'westbourne villas 1-29')
+          .add(new RangeAll())) ;
+
+
+  sections.push(new Section(21,'50 new church rd')
+                  .add(new RangeAll())) ;
+
+  sections.push(new Section(22,'52 new church rd')
+          .add(new RangeAll())) ;
+
+  sections.push(new Section(23,'new church rd 29-19')
+          .add(new RangeAll())) ;
+
+	sections.push(new Section(24,'blenheim')
 									.add(new RangeAll())) ;
 
-	
-	sections.push(new Section(21,'new church rd')
-									.add(new RangeValue(52))) ;
-
-	sections.push(new Section(21,'52 new church rd')
-									.add(new RangeAll())) ;
-	
-	sections.push(new Section(22,'new church rd')
-								.add(new Range(31,19))) ;
-
-
-	sections.push(new Section(23,'new church rd')
-								.add(new RangeValue(17))) ;
-
-	sections.push(new Section(23,'blenheim')
-									.add(new RangeAll())) ;
-	
-	sections.push(new Section(24,'new church rd')
-							.add(new RangeValue(15))) ;
-								
-	sections.push(new Section(24,'pembroke')
+	sections.push(new Section(25,'pembroke')
 							.add(new RangeAll())) ;
 
-
-	sections.push(new Section(25,'new church rd')
-								.add(new Range(13,1))) ;
-
-
-	sections.push(new Section(26,'church rd')
-								.add(new Range(197,171))) ;
-
-	
-	sections.push(new Section(27,'miles walk')
+	sections.push(new Section(26,'new church rd 13-1')
 								.add(new RangeAll())) ;
 
-	sections.push(new Section(27,'matthew house')
+
+	sections.push(new Section(27,'church rd odd')
 								.add(new RangeAll())) ;
-	
+
+
+	sections.push(new Section(28,'miles walk')
+								.add(new RangeAll())) ;
+
+
+  // go through all sections and retrieve cookie values
+
+ for(id in sections) {
+   console.log("Cookie for section " +id) ;
+   let section = sections[id] ;
+   let cookieValue = getCookie("sec"+section.getSectionId()) ;
+   if (cookieValue != null) {
+      section.jsonDecode(cookieValue) ;
+   } else {
+     setCookie("sec"+section.getSectionId(),section.jsonEncode(),7) ;
+   }
+   console.log(section.toString()) ;
+ }
+
+ setInterval(()=>{
+    time.updateSecond();
+    setCookie("time",time.jsonEncode()) ;
+    displayTime(time.getTime()) ;
+ },1000) ;
+
 </script>
 
 <div id='error'>
-	
+
 </div>
 
 <div id='section'>
-	
+
+</div>
+
+<div id='section_info'>
+
 </div>
 
 <div id='street'>
-	
+
 </div>
+
+
+  <button type="button" id='resetparcels'>RESET</button>
+  <input type="radio" id="confirmreset" unchecked>
+ <label for="confirmreset">Confirm Reset</label>
+
+ <div id='rename this id to just time'>
+   TIME 00:00:00
+ </div>
+
+</body>
 
 </html>
