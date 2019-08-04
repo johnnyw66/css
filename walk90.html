@@ -658,7 +658,7 @@ function onLoad() {
  setInterval(()=>{
     time.updateSecond();
     setCookie("time",time.jsonEncode()) ;
-    displayTime(time.getTime()) ;
+    //displayTime(time.getTime()) ;
  },1000) ;
 
 </script>
@@ -684,7 +684,7 @@ function onLoad() {
   <input type="radio" id="confirmreset" unchecked>
  <label for="confirmreset">Confirm Reset</label>
 
- <div id='rename this id to just time'>
+ <div id='time'>
    TIME 00:00:00
  </div>
 
