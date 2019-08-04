@@ -1,4 +1,30 @@
 <html>
+<head>
+  <style>
+  body {
+    background-color: powderblue;
+    max-width: 300px ;
+
+  }
+  h1  {
+    color: blue;
+  }
+  p  {
+    color: red;
+  }
+  select {
+    border-top-width: 20px;
+    border-bottom-width: 20px;
+    border-color: powderblue ;
+  }
+
+  button {
+    margin-right: 20px;
+    border-width: thin;
+  }
+
+  </style>
+</head>
 <body onload='onLoad()'>
 
 <h1>Walk 90 Princes Cres</h1>
@@ -63,14 +89,14 @@
 -->
 
 </select>
-<br>
+
 <!--
 Street Number: <input type="text" id='streetnum' name="streetnumber"><br>
 -->
-
-<button type="button" id='incparcels'>Add Parcel</button>
-<button type="button" id='decparcels'>Remove Parcel</button></button>
-<br>
+<div id='parcel'>
+  <button type="button" id='incparcels'>Add Parcel</button>
+  <button type="button" id='decparcels'>Remove Parcel</button></button>
+</div>
 
 
 <!--
