@@ -96,6 +96,7 @@ function getCookieOrDefault(cname,defValue) {
     return cv ;
   }
 }
+
 function getCookie(cname) {
   var name = cname + "=";
   var decodedCookie = decodeURIComponent(document.cookie);
@@ -167,7 +168,7 @@ class Timer {
       if (!this.pause) {
         this.time++ ;
       }
-      console.log("Time = " + this.time) ;
+      //console.log("Time = " + this.time) ;
     }
 
     jsonEncode() {
