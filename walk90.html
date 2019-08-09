@@ -3,9 +3,9 @@
   <style>
   body {
     background-color: powderblue;
-    width:300px ;
+    width:280px ;
     height:400px ;
-    max-width: 300px ;
+    max-width: 280px ;
 
   }
   h1  {
@@ -99,6 +99,11 @@ Street Number: <input type="text" id='streetnum' name="streetnumber"><br>
 <div id='parcel'>
   <button type="button" id='incparcels'>Add Parcel</button>
   <button type="button" id='decparcels'>Remove Parcel</button></button>
+</div>
+
+<div id='specials'>
+  <button type="button" id='incspecials'>Add SPD</button>
+  <button type="button" id='decspecials'>Remove SPD</button></button>
 </div>
 
 
@@ -308,13 +313,15 @@ class Section {
 		this.streetname = streetname ;
 		this.ranges =  [] ;
     this.totalparcels = 0 ;
+    this.specials = 0 ;
     this.time = time ;
     this.pause = true ;
+
   }
 
 
   jsonEncode() {
-    var obj = {time: this.time, pause: this.pause, totalparcels: this.totalparcels} ;
+    var obj = {time: this.time, pause: this.pause, totalparcels: this.totalparcels, specials:this.specials} ;
     return JSON.stringify(obj) ;
   }
 
@@ -326,7 +333,11 @@ class Section {
       } else {
         this.totalparcels = 0 ;
       }
-
+      if (obj.specials != undefined) {
+        this.specials = obj.specials ;
+      } else {
+        this.specials = 0 ;
+      }
       if (obj.time != undefined) {
         this.time = obj.time ;
       } else {
@@ -368,6 +379,10 @@ class Section {
     this.totalparcels = count ;
   }
 
+  setSpecialsCount(count) {
+    this.specials = count ;
+  }
+
   addParcel() {
     this.totalparcels++ ;
   }
@@ -376,6 +391,17 @@ class Section {
     this.totalparcels-- ;
     if (this.totalparcels < 0) {
       this.totalparcels = 0 ;
+    }
+  }
+
+  addSpecials() {
+    this.specials++ ;
+  }
+
+  removeSpecials() {
+    this.specials-- ;
+    if (this.specials < 0) {
+      this.specials = 0 ;
     }
   }
 
@@ -398,6 +424,11 @@ class Section {
   getParcelTotal() {
     return this.totalparcels ;
   }
+
+  getSpecialsTotal() {
+    return this.specials ;
+  }
+
 	getSectionId() {
 		return this.sectionid ;
 	}
@@ -450,7 +481,20 @@ function findSectionFromElementEntries() {
 
 function updateSectionDisplay(section) {
   var sectionDiv = document.getElementById("section");
-  sectionDiv.innerHTML = " Section: " + section.getSectionId() + " PARCELS: "  + section.getParcelTotal() ;
+  sectionDiv.innerHTML = " Section: " + section.getSectionId() + " PARCELS: "  + section.getParcelTotal() + " SPDS: " + section.getSpecialsTotal() ;
+  var parcelsTotal = 0 ;
+  var specialsTotal = 0 ;
+
+  for(id in sections) {
+    let section = sections[id] ;
+
+    parcelsTotal += section.getParcelTotal() ;
+    specialsTotal += section.getSpecialsTotal();
+
+  }
+  var summaryDiv = document.getElementById("summary");
+  summaryDiv.innerHTML = " TOTAL PARCELS: " + parcelsTotal + " TOTAL SPDS: "  + specialsTotal ;
+  //summaryDiv.innerHTML = " xxxxx: " ;
 
 
 }
@@ -488,18 +532,35 @@ function onLoad() {
     updateSectionDisplay(section) ;
   }
 
+  document.getElementById('incspecials').onclick = function(e){
+    let section = findSectionFromElementEntries() ;
+    section.addSpecials() ;
+    setCookie("sec"+section.getSectionId(),section.jsonEncode(),7) ;
+    updateSectionDisplay(section) ;
+  }
+
+
+  document.getElementById('decspecials').onclick = function(e){
+    let section = findSectionFromElementEntries() ;
+    section.removeSpecials() ;
+    setCookie("sec"+section.getSectionId(),section.jsonEncode(),7) ;
+    updateSectionDisplay(section) ;
+  }
+
   document.getElementById('resetparcels').onclick = function(e){
     var confirmReset = document. getElementById("confirmreset") ;
 
 
     if (confirmReset.checked) {
       confirmReset.checked = false ;
-      console.log("Resetting Parcel count for each section ") ;
+      console.log("Resetting Parcel and Specials count for each section ") ;
+
       for(id in sections) {
         let section = sections[id] ;
-        console.log("Resetting Parcel count section " + id) ;
+        console.log("Resetting Parcel and Specials count section " + id) ;
 
         section.setParcelCount(0) ;
+        section.setSpecialsCount(0);
         setCookie("sec"+section.getSectionId(),section.getParcelTotal(),7) ;
 
       }
@@ -716,6 +777,11 @@ function onLoad() {
 
  <div id='time'>
    TIME 00:00:00
+ </div>
+
+
+ <div id='summary'>
+
  </div>
 
 </body>
