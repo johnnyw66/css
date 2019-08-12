@@ -449,6 +449,13 @@ function vibrate(timeMs) {
 
 }
 
+function resetvibrate() {
+  if (navigator.vibrate) {
+    navigator.vibrate([200, 100, 60]);
+  }
+
+}
+
 function findSection(streetname,streetnumber) {
 
 
@@ -572,6 +579,7 @@ function onLoad() {
 
       }
 
+      resetvibrate() ;
 
       updateDisplay() ;
 
