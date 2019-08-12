@@ -441,6 +441,14 @@ class Section {
 	}
 }
 
+
+function vibrate(timeMs) {
+  if (navigator.vibrate) {
+    navigator.vibrate(timeMs);
+  }
+
+}
+
 function findSection(streetname,streetnumber) {
 
 
@@ -516,6 +524,7 @@ function onLoad() {
     section.addParcel() ;
     setCookie("sec"+section.getSectionId(),section.jsonEncode(),7) ;
     updateSectionDisplay(section) ;
+    vibrate(500) ;
   }
 
 
@@ -524,6 +533,8 @@ function onLoad() {
     section.removeParcel() ;
     setCookie("sec"+section.getSectionId(),section.jsonEncode(),7) ;
     updateSectionDisplay(section) ;
+    vibrate(500) ;
+
   }
 
   document.getElementById('incspecials').onclick = function(e){
