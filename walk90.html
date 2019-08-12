@@ -542,6 +542,7 @@ function onLoad() {
     section.addSpecials() ;
     setCookie("sec"+section.getSectionId(),section.jsonEncode(),7) ;
     updateSectionDisplay(section) ;
+    vibrate(500) ;
   }
 
 
@@ -550,6 +551,7 @@ function onLoad() {
     section.removeSpecials() ;
     setCookie("sec"+section.getSectionId(),section.jsonEncode(),7) ;
     updateSectionDisplay(section) ;
+    vibrate(500) ;
   }
 
   document.getElementById('resetparcels').onclick = function(e){
