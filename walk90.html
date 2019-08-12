@@ -24,6 +24,35 @@
     margin-right: 20px;
     border-width: thin;
   }
+#parcel {
+  margin-top: 10px;
+  margin-bottom: 10px ;
+}
+
+#specials {
+  margin-top: 10px;
+  margin-bottom: 10px ;
+}
+#reset {
+  margin-top: 10px;
+  margin-bottom: 10px ;
+}
+
+#time {
+  margin-top: 10px;
+  margin-bottom: 10px ;
+}
+
+#section {
+  margin-top: 10px;
+  margin-bottom: 10px ;
+}
+
+#summary {
+  margin-top: 10px;
+  margin-bottom: 10px ;
+}
+
 
   </style>
 </head>
@@ -60,7 +89,7 @@
   <option value="princes sq 19-1">Princes Sq (odd) 19-1</option>
   <option value="barford court">Barford Court</option>
   <option value="princes cres 19-3">Princes Cres (19-3)</option>
-  <option value="kingsway 151-141">Kingsway (151-141)</option>
+  <option value="kingsway 155-141">Kingsway (155-141)</option>
   <option value="fairlawns">Fairlawns 159 Kingsway</option>
   <option value="princes cres 2-18">Princes Cres (19-3)</option>
   <option value="princes sq 2-20">Princes Sq (even) 2-20</option>
@@ -684,7 +713,7 @@ function onLoad() {
 	sections.push(new Section(10,'princes cres 19-3')
 									.add(new RangeAll()))  ;
 
-	sections.push(new Section(11,'kingsway 151-141')
+	sections.push(new Section(11,'kingsway 155-141')
 								.add(new RangeAll()))  ;
 
   sections.push(new Section(12,'fairlawns')
@@ -782,10 +811,11 @@ function onLoad() {
 
 </div>
 
-
+<div id='reset'>
   <button type="button" id='resetparcels'>RESET</button>
   <input type="checkbox" id="confirmreset" unchecked>
  <label for="confirmreset">Confirm Reset</label>
+</div>
 
  <div id='time'>
    TIME 00:00:00
