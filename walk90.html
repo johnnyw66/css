@@ -524,7 +524,7 @@ function onLoad() {
     section.addParcel() ;
     setCookie("sec"+section.getSectionId(),section.jsonEncode(),7) ;
     updateSectionDisplay(section) ;
-    vibrate(500) ;
+    vibrate(100) ;
   }
 
 
@@ -533,7 +533,7 @@ function onLoad() {
     section.removeParcel() ;
     setCookie("sec"+section.getSectionId(),section.jsonEncode(),7) ;
     updateSectionDisplay(section) ;
-    vibrate(500) ;
+    vibrate(100) ;
 
   }
 
@@ -542,7 +542,7 @@ function onLoad() {
     section.addSpecials() ;
     setCookie("sec"+section.getSectionId(),section.jsonEncode(),7) ;
     updateSectionDisplay(section) ;
-    vibrate(500) ;
+    vibrate(100) ;
   }
 
 
@@ -551,7 +551,7 @@ function onLoad() {
     section.removeSpecials() ;
     setCookie("sec"+section.getSectionId(),section.jsonEncode(),7) ;
     updateSectionDisplay(section) ;
-    vibrate(500) ;
+    vibrate(100) ;
   }
 
   document.getElementById('resetparcels').onclick = function(e){
