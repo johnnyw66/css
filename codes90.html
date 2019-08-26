@@ -1,0 +1,72 @@
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+  body {
+    background-color: powderblue;
+
+  }
+  h1  {
+    color: blue;
+  }
+  p  {
+    color: red;
+  }
+  </style>
+</head>
+<body onload='onLoad()'>
+
+<h1>90 Princes Cres Codes</h1>
+
+
+<script src='js/jsbarcode.all.min.js' ></script>
+
+<script>
+
+
+
+function onLoad() {
+
+  JsBarcode("#delivery","The Delivery!");
+  JsBarcode("#collection","The Collection!");
+  JsBarcode("#collected","Collected!");
+
+  JsBarcode("#barcode", "1234", {
+    format: "pharmacode",
+    lineColor: "#0aa",
+    width: 4,
+    height: 40,
+    displayValue: false
+  });
+
+  JsBarcode(".barcodeclass").init();
+
+}
+
+</script>
+
+ Barcode
+ <svg id="barcode"></svg>
+ <br />
+
+ Delivery
+ <svg id="delivery"></svg>
+ <br />
+ Collection
+ <svg id="collection"></svg>
+ <br />
+ Collected
+ <svg id="collected"></svg>
+  <br />
+
+ <svg class="barcodeclass"
+   jsbarcode-format="upc"
+   jsbarcode-value="123456789012"
+   jsbarcode-textmargin="0"
+   jsbarcode-fontoptions="bold">
+ </svg>
+
+</body>
+
+</html>
