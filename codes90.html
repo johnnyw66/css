@@ -28,37 +28,48 @@
 
 function onLoad() {
 
-  JsBarcode("#delivery","The Delivery!");
-  JsBarcode("#collection","The Collection!");
-  JsBarcode("#collected","Collected!");
+  JsBarcode("#delivery","400");
+  JsBarcode("#collection","4165");
+  JsBarcode("#collected","BOX600175");
+  JsBarcode("#userid","john.k.wilson1");
 
-  JsBarcode("#barcode", "1234", {
-    format: "pharmacode",
-    lineColor: "#0aa",
-    width: 4,
-    height: 40,
-    displayValue: false
-  });
+  // JsBarcode("#barcode", "1234", {
+  //   format: "pharmacode",
+  //   lineColor: "#0aa",
+  //   width: 4,
+  //   height: 40,
+  //   displayValue: false
+  // });
 
-  JsBarcode(".barcodeclass").init();
+  // JsBarcode(".barcodeclass").init();
 
 }
 
 </script>
 
- Barcode
+ <!-- Barcode
  <svg id="barcode"></svg>
- <br />
+ <br /> -->
 
  Delivery
  <svg id="delivery"></svg>
  <br />
+ <br />
+
  Collection
  <svg id="collection"></svg>
  <br />
+ <br />
+
  Collected
  <svg id="collected"></svg>
   <br />
+  <br />
+
+  userid
+  <svg id="userid"></svg>
+   <br />
+
 
  <svg class="barcodeclass"
    jsbarcode-format="upc"
