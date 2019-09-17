@@ -187,11 +187,17 @@ h1, h2, h3, h4, h5, h6 {
 
 
 /* Testimonials */
-#testimonials {
-  background-color: #ef8172;
+#ttlboards {
+  background-color: #0f0000;
 }
 
 .testimonial-text {
+  font-weight: 900;
+  font-size: 3rem;
+  line-height: 1.5;
+}
+
+.board-description-text {
   font-weight: 900;
   font-size: 3rem;
   line-height: 1.5;
@@ -201,6 +207,13 @@ h1, h2, h3, h4, h5, h6 {
   width: 20%;
   border-radius: 100%;
   margin: 20px ;
+
+}
+
+.board-image {
+  width: 35%;
+  margin: 20px ;
+  border-radius: 20px;
 
 }
 

@@ -16,6 +16,8 @@
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Montserrat:100,400,900|Ubuntu" rel="stylesheet">
 
+  <script type="text/javascript" src="js/boards.js"></script>
+
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -49,10 +51,41 @@
   */
     var t = 0;
     var refresh = 24;
+    var baseImagePath = 'assets/ttlcpu/' ;
 
 
+
+    function parseJSON() {
+      console.log('parse JSON') ;
+      var jsonObj = JSON.parse(boardsData) ;
+      console.log(jsonObj) ;
+      var boardNumber = 1 ;
+
+      for (var key in jsonObj) {
+
+        if (jsonObj.hasOwnProperty(key)) {
+
+        var emphText = jsonObj[key].emphasis;
+        var image = jsonObj[key].image;
+        var boardText = jsonObj[key].heading;
+        boardNumber++ ;
+        var board = 'board-' + boardNumber ;
+        var fullimage = baseImagePath + image ;
+        var boardclass = "." + board ;
+        $(".carousel-inner").append(`<div class='carousel-item ${board}'></div>`);
+        $(boardclass).append(`<h2 class='testimonial-text'>${boardText}</h2>`);
+        $(boardclass).append(`<img class='board-image' src='${fullimage}'></img>`);
+        $(boardclass).append(`<em>${emphText}</em>`);
+
+
+        }
+      }
+
+
+    }
 
     function onLoad() {
+      parseJSON() ;
 
       window.setInterval(function() {
 
@@ -171,20 +204,20 @@
   </section>
 
 
-  <!-- Testimonials -->
+  <!-- TTL Boards  -->
 
-  <section class='coloured-section' id="testimonials">
+  <section class='coloured-section' id="ttlboards">
 
-    <div id="testimonials-carousel" class="carousel slide padding-container" data-ride="carousel" data-interval='7000'>
+    <div id="ttlboard-carousel" class="carousel slide padding-container" data-ride="carousel" data-interval='7000'>
 
       <div class="carousel-inner">
-        <div class="carousel-item testimonial-1">
 
-          <h2 class="testimonial-text">&#34;I no longer have to sniff other dogs for love. I've found the hottest Corgi on TinDog. Woof.&#34;</h2>
-          <img class='testimonial-image' src="images/dog-img.jpg" alt="dog-profile">
+        <div class="carousel-item board-1">
+          <h2 class="board-description-text">&#34;I no longer have to sniff other dogs for love. I've found the hottest Corgi on TinDog. Woof.&#34;</h2>
+          <img class='board-image' src="assets/ttlcpu/4bit-counter.jpg" alt="dog-profile">
           <em>Pebbles, New York</em>
-
         </div>
+
         <div class="carousel-item testimonial-2">
 
           <h2 class="testimonial-text">&#34;My dog used to be so lonely, but with TinDog's help, they've found the love of their life. I think.&#34;</h2>
@@ -200,14 +233,14 @@
         </div>
       </div>
 
-      <a class="carousel-control-prev" href="#testimonials-carousel" role="button" data-slide="prev">
+      <a class="carousel-control-prev" href="#ttlboard-carousel" role="button" data-slide="prev">
         <!-- hide verbose annoucement of the icon from screen readers -->
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <!-- sr == 'screen-read' - accessibility option for visually impaired-->
         <!-- screen reader will just read out the word 'Next' -->
         <span class="sr-only">Previous</span>
       </a>
-      <a class="carousel-control-next" href="#testimonials-carousel" role="button" data-slide="next">
+      <a class="carousel-control-next" href="#ttlboard-carousel" role="button" data-slide="next">
         <!-- hide verbose annoucement of the icon from screen readers -->
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <!-- sr == 'screen-read' - accessibility option for visually impaired-->
@@ -322,7 +355,7 @@
     </span>
 
 
-    <p>© Copyright 2018 TinDog</p>
+    <p>© Copyright 2018 John Wilson, Brighton - Sussex</p>
 
   </footer>
 
