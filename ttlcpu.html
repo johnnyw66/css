@@ -73,7 +73,7 @@
         var fullimage = baseImagePath + image ;
         var boardclass = "." + board ;
         $(".carousel-inner").append(`<div class='carousel-item ${board}'></div>`);
-        $(boardclass).append(`<h2 class='testimonial-text'>${boardText}</h2>`);
+        $(boardclass).append(`<h2 class='class="board-description-text'>${boardText}</h2>`);
         $(boardclass).append(`<img class='board-image' src='${fullimage}'></img>`);
         $(boardclass).append(`<em>${emphText}</em>`);
 
@@ -212,25 +212,12 @@
 
       <div class="carousel-inner">
 
-        <div class="carousel-item board-1">
-          <h2 class="board-description-text">&#34;I no longer have to sniff other dogs for love. I've found the hottest Corgi on TinDog. Woof.&#34;</h2>
-          <img class='board-image' src="assets/ttlcpu/4bit-counter.jpg" alt="dog-profile">
-          <em>Pebbles, New York</em>
+        <div class="carousel-item active board-1">
+          <h2 class="board-description-text">&#34;Board Description.&#34;</h2>
+          <img class='board-image' src="assets/ttlcpu/4bit-counter.jpg" alt="board-profile">
+          <em>(c) Johnny Wilson 2017-2019</em>
         </div>
 
-        <div class="carousel-item testimonial-2">
-
-          <h2 class="testimonial-text">&#34;My dog used to be so lonely, but with TinDog's help, they've found the love of their life. I think.&#34;</h2>
-          <img class="testimonial-image" src="images/lady-img.jpg" alt="lady-profile">
-          <em>Beverly, Illinois</em>
-
-        </div>
-
-        <div class="carousel-item active testimonial-3">
-          <h2 class="testimonial-text">&#34;I hate dogs - so TinDog's app did the biz in getting my wife's flea ridden mutt out of the house.&#34;</h2>
-          <img class="testimonial-image" src="images/grumpyman-img.jpg" alt="unfriendly-man-profile">
-          <em>Johnny, Sussex</em>
-        </div>
       </div>
 
       <a class="carousel-control-prev" href="#ttlboard-carousel" role="button" data-slide="prev">
