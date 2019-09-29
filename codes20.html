@@ -17,8 +17,7 @@
 </head>
 <body onload='onLoad()'>
 
-<h1>90 Princes Cres Codes</h1>
-
+<h1>20 Eaton Gardens</h1>
 
 <script src='js/jsbarcode.all.min.js' ></script>
 
@@ -31,6 +30,7 @@ function onLoad() {
   JsBarcode("#delivery","4913378034");
   JsBarcode("#collection","4932023035");
   JsBarcode("#collected","BOX600175");
+  JsBarcode("#collectedea","BOX600666");
   JsBarcode("#userid","john.k.wilson1");
 
   // JsBarcode("#barcode", "1234", {
@@ -47,12 +47,13 @@ function onLoad() {
 
 </script>
 
+<div id='walk'>
+  <a href="walk20.html">Walk</a>
+</div>
+
  <!-- Barcode
  <svg id="barcode"></svg>
  <br /> -->
- <div id='walk'>
-  <a href="walk90.html">Walk</a>
- </div>
 
  Delivery
  <svg id="delivery"></svg>
@@ -64,10 +65,15 @@ function onLoad() {
  <br />
  <br />
 
- Collected
+ Collected (Cromwell Road)
  <svg id="collected"></svg>
   <br />
   <br />
+
+  Collected (Eaton Gardens)
+  <svg id="collectedea"></svg>
+   <br />
+   <br />
 
   userid
   <svg id="userid"></svg>
@@ -80,6 +86,7 @@ function onLoad() {
    jsbarcode-textmargin="0"
    jsbarcode-fontoptions="bold">
  </svg>
+
 
 </body>
 
