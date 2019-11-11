@@ -1,0 +1,50 @@
+<html>
+<head>
+<link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro|Open+Sans+Condensed:300|Raleway' rel='stylesheet' type='text/css'>
+<!-- Include JS File Here -->
+<link href="style.css" rel="stylesheet"/>
+<!-- Include JS File Here -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+
+$("#btnMusicOff").click(function(){
+  $.post("https://api.particle.io/v1/devices/53ff6f065075535115281687/musicvolume", //Required URL of the page on server
+  {
+  // Data Sending With Request To Server
+  access_token:"28b6dc8526fa5e28dc47b1d251f0418487d00cf8",
+  args:"0"
+  },
+   function(response,status){ // Required Callback Function
+    //alert("*----Received Data----*nnResponse : " + response+"nnStatus : " + status);//"response" receives - whatever written in echo of above PHP script.
+   });
+  });
+
+  $("#btnMusicOn").click(function(){
+    $.post("https://api.particle.io/v1/devices/53ff6f065075535115281687/musicvolume", //Required URL of the page on server
+    {
+    // Data Sending With Request To Server
+    access_token:"28b6dc8526fa5e28dc47b1d251f0418487d00cf8",
+    args:"15"
+    },
+     function(response,status){ // Required Callback Function
+      //alert("*----Received Data----*nnResponse : " + response+"nnStatus : " + status);//"response" receives - whatever written in echo of above PHP script.
+     });
+    });
+
+});
+
+
+</script>
+</head>
+
+<body>
+<div id="main">
+<h2>jQuery Ajax $.post() Method</h2>
+<hr>
+  <button id="btnMusicOff">Music Off</button>
+  <button id="btnMusicOn">Music On</button>
+</div>
+</body>
+
+</html>
