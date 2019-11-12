@@ -10,9 +10,10 @@ $(document).ready(function(){
   let devId = "53ff6f065075535115281687" ;
       devId = "32001c001647373335333438" ;
 
+  let accessToken = "28b6dc8526fa5e28dc47b1d251f0418487d00cf8" ;
+
 
 $("#btnMusicOff").click(function(){
-  let accessToken = "28b6dc8526fa5e28dc47b1d251f0418487d00cf8" ;
 
   $.post(`https://api.particle.io/v1/devices/${devId}/musicvolume`, //Required URL of the page on server
   {
