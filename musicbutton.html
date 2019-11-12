@@ -9,7 +9,9 @@
 $(document).ready(function(){
 
 $("#btnMusicOff").click(function(){
-  $.post("https://api.particle.io/v1/devices/53ff6f065075535115281687/musicvolume", //Required URL of the page on server
+  let devId = "53ff6f065075535115281687" ;
+        devId = "32001c001647373335333438"
+  $.post(`https://api.particle.io/v1/devices/${devId}/musicvolume`, //Required URL of the page on server
   {
   // Data Sending With Request To Server
   access_token:"28b6dc8526fa5e28dc47b1d251f0418487d00cf8",
@@ -21,7 +23,7 @@ $("#btnMusicOff").click(function(){
   });
 
   $("#btnMusicOn").click(function(){
-    $.post("https://api.particle.io/v1/devices/53ff6f065075535115281687/musicvolume", //Required URL of the page on server
+    $.post(`https://api.particle.io/v1/devices/${devId}/musicvolume`, //Required URL of the page on server
     {
     // Data Sending With Request To Server
     access_token:"28b6dc8526fa5e28dc47b1d251f0418487d00cf8",
