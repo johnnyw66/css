@@ -11,7 +11,7 @@
   "dependencies": {
     "bluetooth-scanner": "^1.0.1",
     "body-parser": "^1.18.3",
-    "express": "^4.16.4",
+    "express": "^4.17.3",
     "node-bluetooth": "^1.2.5",
     "pcap": "^2.1.0",
     "request": "^2.88.0"
