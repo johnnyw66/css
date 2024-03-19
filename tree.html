@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Christmas Tree</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+</head>
+<body>
+    <script>let angleSlider, layerSlider;
+        let design = { angle: 45, layers: 6 };
+
+        function setup() {
+            let canvas = createCanvas(800, 400);
+            canvas.parent('canvas-container');
+
+            angleSlider = createSlider(0, 89, design.angle, 1);
+            angleSlider.position(10, 60);
+            let angleText = createP();
+            angleText.position(10, 0);
+
+            layerSlider = createSlider(4, 16, design.layers, 1);
+            layerSlider.position(500, 60);
+            let layerText = createP();
+            layerText.position(500, 0);
+
+            layerText.html(`LAYERS: ${design.layers}`);
+            angleText.html(`ANGLE: ${design.angle}`);
+
+            drawTree(height, design);
+            completeDesign(design, height)
+
+            angleSlider.input(() => {
+                design.angle = angleSlider.value();
+                angleText.html(`ANGLE: ${angleSlider.value()}`);
+                drawTree(height, design);
+                completeDesign(design, height)
+            });
+
+            layerSlider.input(() => {
+                design.layers = layerSlider.value();
+                layerText.html(`LAYERS: ${layerSlider.value()}`);
+                drawTree(height, design);
+                completeDesign(design, height)
+            });
+
+            //let compileButton = createButton("Compile Tree");
+            //compileButton.position(300, 40);
+            //compileButton.mousePressed(() => completeDesign(design, height));
+        }
+
+        function drawTree(h, design) {
+            let coneAngle = design.angle;
+            let numLayers = design.layers;
+            background(255);
+
+            let trunkHeight = (3 * h) / 4;
+
+            // Draw trunk
+            let trunkWidth = 4;
+            let trunkX1 = width / 2 - trunkWidth / 2;
+            let trunkY1 = height - trunkHeight;
+            let trunkX2 = width / 2 + trunkWidth / 2;
+            let trunkY2 = height;
+            fill(139, 69, 19); // brown
+            rect(trunkX1, trunkY1, trunkWidth, trunkHeight);
+
+            // Draw branches
+            let numHeightPoints = numLayers + 1;
+            for (let i = 0; i < numHeightPoints; i++) {
+                let y = (i * trunkHeight * 3) / (4 * numHeightPoints);
+                let d = calculateBranchDiameter(trunkHeight, coneAngle, y);
+                let x = width / 2;
+                let x1 = x - d / 2;
+                let x2 = x + d / 2;
+                let y1 = y + trunkY1 - 5 / 2;
+                let y2 = y1 + 5;
+                fill(0, 128, 0); // green
+                rect(x1, y1, d, 5);
+            }
+        }
+
+        function calculateBranchDiameter(h, angle, y) {
+            return 2 * y * tan(radians(angle));
+        }
+
+        function completeDesign(design, h) {
+            let dowelLength = 24;
+            let dowelDiameter = 0.4;
+            let trunkHeight = (3 * h) / 4;
+            let numHeightPoints = design.layers + 1;
+
+            let outputDiv = document.getElementById('output');
+            outputDiv.innerHTML = ''; // Clear previous output
+
+            let logs = [];
+            logs.push(`Complete_design- Dowel length ${dowelLength}cm dowel diamter ${dowelDiameter}cm - when placing one branch place an opposing branch of the same length on the opposite side.`);
+            logs.push("These branch tips should line up at their given distance from the top. - Do not worry about the curly bits going up.");
+
+            for (let i = 0; i < numHeightPoints; i++) {
+                let y = (i * trunkHeight * 3) / (4 * numHeightPoints);
+                let d = calculateBranchDiameter(trunkHeight, design.angle, y);
+
+                let yCM = (y * dowelLength) / trunkHeight;
+                let dCM = (d * dowelLength) / trunkHeight;
+                if (i == 0) {
+                    logs.push(`Layer ${i} Place Star ${yCM.toFixed(2)}cm from the top.`);
+                } else {
+                    logs.push(`Layer ${i} Distance from top ${yCM.toFixed(2)}cm. Length of 2 opposing branches from tip to tip ${(dCM * 2 + dowelDiameter).toFixed(2)}cm`);
+                }
+            }
+
+            logs.forEach(log => {
+                let logParagraph = document.createElement('p');
+                logParagraph.textContent = log;
+                outputDiv.appendChild(logParagraph);
+            });
+        }
+
+        function draw() {
+            //let angleText = document.querySelector('#angle-text');
+            //let layerText = document.querySelector('#layer-text');
+            //angleText.textContent = `ANGLE: ${angleSlider.value()}`;
+            //layerText.textContent = `LAYERS: ${layerSlider.value()}`;
+        }</script>
+
+    <div id="canvas-container"></div>
+    <div id="instructions">
+        <b>
+        <p>Use the sliders to adjust the angle of the tree cone and the number of branch layers you want.</p>
+        <p>Whenever you make a change - you should see the measurements needed to build your tree.</p>
+        <p>Layer positions and the opposing branch lengths will be displayed.</p>
+        </b>
+    </div>
+    <div id="output"></div>
+
+    <p id="angle-text"></p>
+    <p id="layer-text"></p>
+</body>
+</html>
